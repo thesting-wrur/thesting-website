@@ -2,7 +2,7 @@
 <?php
 global $max_col_count;
 global $current_col_count;
-	$num_cols = 4;//theoretically will be read from post meta probably
+global $num_cols;
 		if ($current_col_count === 12) {//if a row is full, make a new one
 			$current_col_count = 0;
 			echo '</div>';//end row

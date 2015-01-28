@@ -6,6 +6,6 @@
 				WRUR The Sting. 88.5 FM and HD Rochester
 			</div>
 		</div>
-	<script> jQuery(document).foundation();</script>
+	<script>jQuery(document).foundation();</script>
 	</body><!--opened in header.php -->
 </html><!--opened in header.php -->

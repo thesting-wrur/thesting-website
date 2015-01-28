@@ -5,6 +5,7 @@
 <?php
 $max_col_count = 12;
 $current_col_count = 0;
+$num_cols = 4;//theoretically will be read from post meta probably
 echo '<div class="row">';//start new row
 	if (have_posts()) {
 		while(have_posts()) {
