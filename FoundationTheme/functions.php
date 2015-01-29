@@ -24,6 +24,4 @@ function sting_register_menu() {
 	register_nav_menu('primary', 'Primary Navigation');
 }
 add_action('init', 'sting_register_menu');
-
-
 ?>

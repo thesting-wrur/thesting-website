@@ -3,8 +3,8 @@
  * Template Name: Home Media Feed
  */
  get_header();
-$args = array('category' => '61');
-//$args = array('category' => '3');
+//$args = array('category' => '61');
+$args = array('category' => '3');
 $wanted_posts = get_posts($args);
 ?>
 <!-- Loop stuff -->
@@ -32,9 +32,9 @@ echo '<div class="row">';//start new row
 			break;
 		}
 	}		
-			get_template_part('postContent',''); ?>
+			get_template_part('postContent','');
 			
-		<?php endforeach;
+		 endforeach;
 	if ($current_col_count != $max_col_count) {
 		echo '</div>';//end row
 	}
@@ -47,4 +47,3 @@ echo '<div class="row">';//start new row
 <!-- End loop stuff -->
 
 <?php get_footer() ?>
- ?>
