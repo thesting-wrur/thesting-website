@@ -24,6 +24,12 @@ global $num_cols;
 		
 		<!--Post content and title-->
 		<h2><a href="<?php the_permalink();?>" title="<?php the_title_attribute();?>"> <?php the_title()?></a></h2>
-		<?php the_content('Continue Reading'); ?>
+		<?php
+		if (has_excerpt()) {
+			the_excerpt('Continue Reading');
+		} else {
+			the_content('Continue Reading'); 
+		}
+		?>
 	</article>
 <!--end postContent.php -->

@@ -7,6 +7,7 @@
 		<title><?php wp_title();?></title><!-- Change how the title looks in a filter: http://codex.wordpress.org/Function_Reference/wp_title -->
 		<link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>" type="text/css" /><!--maybe media="screen"-->
 		<link rel="pingback" href="<?php bloginfo('pingback_url');?>" />
+		<link rel="alternate" type="application/rss+xml" title="Subscribe to The Sting" href="<?php bloginfo('rss2_url'); ?>" />
 		<!--start wp_head() section -->
 		<?php wp_head(); ?>
 		<!--end wp_head() section -->

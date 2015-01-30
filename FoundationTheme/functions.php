@@ -24,4 +24,10 @@ function sting_register_menu() {
 	register_nav_menu('primary', 'Primary Navigation');
 }
 add_action('init', 'sting_register_menu');
+
+function sting_add_theme_support() {
+	//allow wordpress generated stuff to use html5
+	add_theme_support('html5', array('comment-list', 'comment-form', 'search-form', 'gallery', 'caption'));
+}
+add_action( 'after_setup_theme', 'sting_add_theme_support' );
 ?>
