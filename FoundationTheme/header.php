@@ -12,7 +12,7 @@
 		<?php wp_head(); ?>
 		<!--end wp_head() section -->
 	</head>
-	<body>
+	<body <?php body_class(); ?>>
 	<div class="row">
 		<nav class="top-bar" data-topbar>
 			<ul class="title-area">
