@@ -1,0 +1,178 @@
+@import "fonts";
+@import "settings";
+@import "foundation";
+
+// Or selectively include components
+// @import
+//   "foundation/components/accordion",
+//   "foundation/components/alert-boxes",
+//   "foundation/components/block-grid",
+//   "foundation/components/breadcrumbs",
+//   "foundation/components/button-groups",
+//   "foundation/components/buttons",
+//   "foundation/components/clearing",
+//   "foundation/components/dropdown",
+//   "foundation/components/dropdown-buttons",
+//   "foundation/components/flex-video",
+//   "foundation/components/forms",
+//   "foundation/components/grid",
+//   "foundation/components/inline-lists",
+//   "foundation/components/joyride",
+//   "foundation/components/keystrokes",
+//   "foundation/components/labels",
+//   "foundation/components/magellan",
+//   "foundation/components/orbit",
+//   "foundation/components/pagination",
+//   "foundation/components/panels",
+//   "foundation/components/pricing-tables",
+//   "foundation/components/progress-bars",
+//   "foundation/components/reveal",
+//   "foundation/components/side-nav",
+//   "foundation/components/split-buttons",
+//   "foundation/components/sub-nav",
+//   "foundation/components/switches",
+//   "foundation/components/tables",
+//   "foundation/components/tabs",
+//   "foundation/components/thumbs",
+//   "foundation/components/tooltips",
+//   "foundation/components/top-bar",
+//   "foundation/components/type",
+//   "foundation/components/offcanvas",
+//   "foundation/components/visibility";
+
+
+#menu {
+  background-color: $gray-color;
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: $tabbar-height;
+  left: -200px;
+  width: 200px;
+}
+
+.menu-item {
+  margin: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.dark-button, .dark-button:visited {
+  background-color: $gray-color;
+}
+
+.dark-button:hover, .dark-button:active {
+  background-color: $light-gray-color;
+}
+
+#content {
+  position: relative;
+}
+
+.home-banner {
+  position: relative;
+  height: 60vw;
+  max-height: 420px;
+  overflow: hidden;
+  text-shadow: 1px 1px 2px #000;
+  width: 100%;
+}
+
+.home-banner-small {
+  background-color: $gray-color;
+}
+
+.home-banner-image {
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.home-banner-title {
+  position: relative;
+  text-align: left;
+  top: 0;
+  width: 100%;
+}
+
+.home-banner-title:before {
+  content: "";
+  display: block;
+  height: 20vw;
+  max-height: 140px;
+  position: relative;
+}
+
+.home-banner-header, .home-banner-paragraph {
+  color: $body-bg;
+}
+
+.home-banner-header {
+  font-weight: bold;
+  margin-top: $paragraph-margin-bottom;
+}
+
+.home-banner-paragraph {
+  font-size: 1.5 * $paragraph-font-size;
+}
+
+a.article-link {
+  color: inherit;
+}
+
+a.article-link:hover {
+  color: $anchor-font-color-hover;
+}
+
+.article-image-box {
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  width: 100%;
+}
+
+.article-image-box:before {
+  content: "";
+  display: block;
+  padding-top: 50%;
+}
+
+.article-image-content img {
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.article-related {
+  font-size: $small-font-size;
+  font-weight: bold;
+}
+
+.stream-filler {
+  height: 70px;
+  position: relative;
+}
+
+#content-darken {
+  background-color: rgba(0, 0, 0, 0.5);
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.stream {
+  bottom: 0;
+  position: fixed;
+  right: 0;
+}
+
+.stream-listen {
+  margin: 0;
+}

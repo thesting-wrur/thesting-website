@@ -7,9 +7,9 @@
 		<h2><a href="<?php the_permalink();?>" title="<?php the_title_attribute();?>"> <?php the_title()?></a></h2>
 		<?php
 		if (has_excerpt()) {
-			the_excerpt('Continue Reading');
+			the_excerpt('...');
 		} else {
-			the_content('Continue Reading'); 
+			the_content('...'); 
 		}
 		?>
 	</article>
