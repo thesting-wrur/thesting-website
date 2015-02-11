@@ -1,11 +1,5 @@
 <?php
-/*
- * Template Name: Home Media Feed
- */
 get_header();
-//$args = array('category' => '61');
-//$args = array('category' => '3');
-//$wanted_posts = get_posts($args);
 ?>
 <div id="content">
 <div class="home-banner">

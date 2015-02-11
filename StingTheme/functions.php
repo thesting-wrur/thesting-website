@@ -11,15 +11,11 @@ add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_styles');
 
 //enqueue scripts
 function sting_enqueue_foundation_script() {
-	//wp_enqueue_script('jquery');the default jquery installed with wordpress doesn't allow for using $
 	wp_deregister_script('jquery');
 	wp_enqueue_script('jquery', get_template_directory_uri().'/js/jquery.min.js','','',true);
 	wp_enqueue_script('sting-foundation-js', get_template_directory_uri().'/js/foundation.js','','',true);
-	//wp_enqueue_script('sting-foundation-topbar-js', get_template_directory_uri().'/js/foundation.topbar.js','','',true);
-	//wp_enqueue_script('sting-fastclick', get_template_directory_uri().'/js/fastclick.js');
 	wp_enqueue_script('sting-modernizr', get_template_directory_uri().'/js/modernizr.js');
 	wp_enqueue_script('sting-code', get_template_directory_uri().'/js/app.js','','',true);
-	//wp_enqueue_script('sting-code','','','',true);
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
