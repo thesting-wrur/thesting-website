@@ -1,5 +1,6 @@
 <?php
-require 'foundation-press/menu-walker.php';
+require_once 'foundation-press/menu-walker.php';
+require_once '/admin/admin.php';
 //enqueue styles
 function sting_enqueue_foundation_styles() {
 	wp_register_style('sting-foundation-app', get_template_directory_uri().'/css/app.css');
@@ -40,6 +41,7 @@ function sting_display_mobile_menu() {
 		$menu_items = wp_get_nav_menu_items($menu->term_id);
 		$menu_list = '<div id="menu" class="show-for-small-only">';
 		$menu_item_classes = '"button dark-button menu-item"';
+		$menu_list .= '<a class='.$menu_item_classes.' href="'.get_site_url().'">'.'Home'.'</a>';
 		foreach ( (array) $menu_items as $key => $menu_item ) {
 			if ($menu_item -> post_parent == 0) {
 				$title = $menu_item->title;
