@@ -60,4 +60,28 @@ function sting_homepage_category( $query ) {
     }
 }
 add_action( 'pre_get_posts', 'sting_homepage_category' );
+
+function sting_compare_shows_by_date_time($show1, $show2) {
+	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday');
+	$day1 = get_field('day', $show1 -> ID);
+	$day2 = get_field('day', $show2 -> ID);
+	$day1_index = array_search($day1, $days);
+	$day2_index = array_search($day2, $days);
+	if ($day1_index < $day2_index) {
+		return -1;
+	} else if ($day1_index > $day2_index) {
+		return 1;
+	} else {
+		$stime1 = get_field('start_time', $show1 -> ID, false);
+		$stime2 = get_field('start_time', $show2 -> ID, false);
+		if ($stime1 < $stime2) {
+			return -1;
+		} else if ($stime1 > $stime2) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+	return 0;
+}
 ?>

@@ -1,12 +1,15 @@
-<?php get_header() ?>
-<!--page.php -->
 <?php
-$page = get_post(get_queried_object_id()); ?>
-<div class="row">
-	<article class="full-12 columns">
-		<h2><?php echo $page -> post_title;?></h2>
-		<?php echo $page -> post_content; ?>
-	</article>
-</div>
-<!--end page.php stuff -->
-<?php get_footer() ?>
+/*
+ * Default Page Template.
+ * Note, all pages who are children of the "Schedule" page will be rendered with the "show" template.
+ * All other pages will be rendered with the "normalPage" template.
+ * This is so that when we add shows, the person who is adding the show only has to set the parent - they don't have to set both the parent and the template.
+ */
+$id = get_queried_object_id();
+$page = get_post($id);
+if ($page -> post_parent == 2239 || $page -> post_parent == 2145) {
+	get_template_part('show', '');
+} else {
+	get_template_part('normalPage','');
+}
+?>
