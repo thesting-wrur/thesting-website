@@ -2,35 +2,29 @@
 get_header();
 ?>
 <div id="content">
-<div class="home-banner">
-        <!--<a class="article-link" href="#">-->
-          <img class="home-banner-image" alt="Image of a large Studio" src="<?php echo get_template_directory_uri();?>/images/studio.jpg">
+	<div class="home-banner">
+        <a class="article-link" href="#">
+          <img alt="Image of a large Studio" src="<?php echo get_template_directory_uri();?>/images/studio.jpg">
           <div class="hide-for-small-only">
             <div class="row">
-              <div class="home-banner-title">
                 <div class="large-12 columns">
-                  <h1 class="home-banner-header">Station Renovations</h1>
-                  <p class="home-banner-paragraph">
-                    Check out the new furniture and equipment in the station!  New couches, sound boards, headphones, and more...
-                  </p>
+					<h1><?php echo bloginfo('name');?></h1>
+					<p><?php bloginfo('description');?></p>
                 </div>
-              </div>
             </div>
           </div>
-        <!--</a>-->
+        </a>
       </div>
 
       <div class="home-banner-small show-for-small-only">
-        <!--<a class="article-link" href="#">-->
+        <a class="article-link" href="#">
           <div class="row">
             <div class="large-12 columns">
-              <h1 class="home-banner-header">Station Renovations</h1>
-              <p class="home-banner-paragraph">
-                Check out the new furniture and equipment in the station!  New couches, computers, headphones, and more...
-              </p>
+              <h1><?php echo bloginfo('name');?></h1>
+              <p><?php bloginfo('description');?></p>
             </div>
           </div>
-        <!--</a>-->
+        </a>
       </div>
 
 <!-- Loop stuff -->
@@ -44,5 +38,5 @@ get_header();
 		</div>
 </div>
 <!-- End loop stuff -->
-<div class="stream-filler"></div>
+<div class="space-filler"></div>
 <?php get_footer() ?>

@@ -1,12 +1,14 @@
 <?php
 require_once 'foundation-press/menu-walker.php';
-require_once '/admin/admin.php';
+require_once 'admin/admin.php';
 //enqueue styles
 function sting_enqueue_foundation_styles() {
 	wp_register_style('sting-foundation-app', get_template_directory_uri().'/css/app.css');
 	wp_register_style('sting-foundations-icons', get_template_directory_uri().'/css/foundation-icons.css');
+	wp_register_style('sting-google-font-railway', 'http://fonts.googleapis.com/css?family=Raleway:800');
 	wp_enqueue_style('sting-foundation-app');
 	wp_enqueue_style('sting-foundation-icons');
+	wp_enqueue_style('sting-google-font-railway');
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_styles');
 
@@ -40,7 +42,7 @@ function sting_display_mobile_menu() {
 		$menu = wp_get_nav_menu_object( $locations[ $menu_name ] );
 		$menu_items = wp_get_nav_menu_items($menu->term_id);
 		$menu_list = '<div id="menu" class="show-for-small-only">';
-		$menu_item_classes = '"button dark-button menu-item"';
+		$menu_item_classes = '"button button-dark menu-item"';
 		$menu_list .= '<a class='.$menu_item_classes.' href="'.get_site_url().'">'.'Home'.'</a>';
 		foreach ( (array) $menu_items as $key => $menu_item ) {
 			if ($menu_item -> post_parent == 0) {
@@ -75,13 +77,62 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 		$stime1 = get_field('start_time', $show1 -> ID, false);
 		$stime2 = get_field('start_time', $show2 -> ID, false);
 		if ($stime1 < $stime2) {
-			return -1;
-		} else if ($stime1 > $stime2) {
 			return 1;
+		} else if ($stime1 > $stime2) {
+			return -1;
 		} else {
 			return 0;
 		}
 	}
 	return 0;
 }
+function sting_display_show_schedule($day_of_week, $index, $child_pages) {
+	global $post;//Will be modified later on, then reverted to what it was. If we don't do this, we will break wordpress
+	//Post refers to the current post. We temporarily use it to refer to another post, and then revert it.
+	for (;$index < count($child_pages);$index++) {
+		$current_page = $child_pages[$index];
+		$day = get_field('day', $current_page -> ID);
+		if (strcmp($day, $day_of_week) != 0) {
+			break;
+		}
+		echo '<div class="post">';
+		echo get_field('start_time', $current_page -> ID).' - '.get_field('end_time', $current_page -> ID);
+		echo '<a href="'.get_permalink($current_page -> ID).'">'.$current_page -> post_title;
+		echo '</a>';
+		$wp_post_var = $post;//$post is a global variable in wordpress. We need to reset it back to what it was or other parts of wordpress WILL BREAK
+		$post = $current_page;//Setting it to the current page
+		echo coauthors(',', ' and ', ' - ', '', false);
+		$post = $wp_post_var;//Resetting it
+		echo '</div>';
+	}
+	return $index;
+}
+/*function sting_create_show_type() {
+	$args = array(
+		'description'         => 'Post Type Description',
+		'labels'              => 
+		'supports'            => array( ),
+		'taxonomies'          => array( 'category', 'post_tag' ),
+		'hierarchical'        => false,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 5,
+		'can_export'          => true,
+		'has_archive'         => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'capability_type'     => 'page',
+	);
+	register_post_type( 'show', $args ); 
+}*/
+/*function sting_capitalize_title($title, $sep) {
+	$upper_title = substr($title, 0, strpos($title, $sep));
+	$subtitle = substr($title, strpos($title, $sep), strlen($title));
+	$upper_title = strtoupper($upper_title);
+	return $upper_title.$subtitle;
+}
+add_filter( 'wp_title', 'sting_capitalize_title', 10, 2 );*/
 ?>

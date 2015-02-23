@@ -16,13 +16,13 @@
       <nav class="top-bar hide-for-small-only" data-topbar role="navigation">
         <ul class="title-area center">
           <li class="name">
-            <h1><a href="<?php echo get_site_url();?>"><?php echo get_bloginfo('name');?></a></h1>
+            <h1><a href="<?php echo get_site_url();?>"><?php echo strtoupper(get_bloginfo('name'));?></a></h1>
           </li>
         </ul>
 
         <section class="top-bar-section">
           <ul class="right">
-            <li class="active"></li>
+            <li><a href="#">Listen Live</a></li>
           </ul>
 
 		<?php 
@@ -54,8 +54,12 @@
         </section>
 
         <section class="left" style="padding-left: 10px;">
-          <h1 class="title">The Sting</h1>
+          <h1 class="title"><?php echo strtoupper(get_bloginfo('name'));?></h1>
         </section>
       </nav>
 	  <?php sting_display_mobile_menu();?>
     </div>
+	<?php/*
+	 if (is_front_page()) {
+		//Main big blog page header
+	}*/
