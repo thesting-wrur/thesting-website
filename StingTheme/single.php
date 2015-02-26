@@ -15,10 +15,17 @@
 				<hr>
 				<?php the_content('Continue Reading'); ?>
 				<hr>
-				<div><?php previous_post_link() ?></div>
-				<div><?php next_post_link() ?></div>
+				<div class="left"><?php previous_post_link(); ?></div>
+				<div class="right"><?php next_post_link(); ?></div>
 				<hr>
-				<div>Comments <?php comments_template(); ?> </div>
+				<div>
+					<?php
+						global $post;
+						if (post_type_supports(get_post_type($post), 'comments')) {
+						echo 'Comments ';
+						comments_template();
+					}?>
+				</div>
 			</div>
 <?php
 		}//end while

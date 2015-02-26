@@ -8,7 +8,7 @@
 		?>
 		<div class="row">
 			<article class="full-12 columns">
-				<h2><?php the_title();//echo $page -> post_title;?></h2>
+				<h2><?php //the_title();//echo $page -> post_title;?></h2>
 				<?php the_content();//echo $page -> post_content; ?>
 			</article>
 		</div>

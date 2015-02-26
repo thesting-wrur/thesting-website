@@ -64,7 +64,7 @@ function sting_homepage_category( $query ) {
 add_action( 'pre_get_posts', 'sting_homepage_category' );
 
 function sting_compare_shows_by_date_time($show1, $show2) {
-	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday');
+	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
 	$day1 = get_field('day', $show1 -> ID);
 	$day2 = get_field('day', $show2 -> ID);
 	$day1_index = array_search($day1, $days);
@@ -86,10 +86,10 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 	}
 	return 0;
 }
-function sting_display_show_schedule($day_of_week, $index, $child_pages) {
+function sting_display_show_schedule($day_of_week, $index, $child_pages, $num_pages) {
 	global $post;//Will be modified later on, then reverted to what it was. If we don't do this, we will break wordpress
 	//Post refers to the current post. We temporarily use it to refer to another post, and then revert it.
-	for (;$index < count($child_pages);$index++) {
+	for (;$index < $num_pages;$index++) {
 		$current_page = $child_pages[$index];
 		$day = get_field('day', $current_page -> ID);
 		if (strcmp($day, $day_of_week) != 0) {
@@ -107,27 +107,25 @@ function sting_display_show_schedule($day_of_week, $index, $child_pages) {
 	}
 	return $index;
 }
-/*function sting_create_show_type() {
+$show_type = 'sting_shows';
+function sting_create_show_type() {
+	global $show_type;
 	$args = array(
-		'description'         => 'Post Type Description',
-		'labels'              => 
-		'supports'            => array( ),
+		'description'         => 'Sting Shows',
+		'labels'              => array('name' => 'Shows', 'singular_name' => 'Show', 'add_new_item' => 'Add New Show', 'edit_item' => 'Edit Show', 'new_item' => 'New Show', 'view_item' => 'View Show Page', 'search_items' => 'Search Shows', 'not_found' => 'No shows found', 'not_found_in_trash' => 'No shows found in the Trash'),
+		'supports'            => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields', 'revisions', 'bage-attributes'),
 		'taxonomies'          => array( 'category', 'post_tag' ),
-		'hierarchical'        => false,
 		'public'              => true,
-		'show_ui'             => true,
-		'show_in_menu'        => true,
-		'show_in_nav_menus'   => true,
-		'show_in_admin_bar'   => true,
 		'menu_position'       => 5,
-		'can_export'          => true,
 		'has_archive'         => true,
-		'exclude_from_search' => false,
-		'publicly_queryable'  => true,
 		'capability_type'     => 'page',
+		'menu_icon'			  => 'dashicons-microphone',
+		'rewrite'			  => array('slug' => 'shows'),
 	);
-	register_post_type( 'show', $args ); 
-}*/
+	register_post_type( $show_type, $args );
+//'capabilities'		  => array('edit_post' => 'edit_show', 'read_post' => 'read_show', 'delete_post' => 'delete_show', 'edit_others_posts' => 'edit_others_shows', 'publish_posts' => 'publish_shows', 'read_private_posts' => 'read_private_shows', 'read' => 'read', 'delete_posts' => 'delete_shows', 'delete_private_posts' => 'delete_private_shows', 'delete_published_posts' => 'delete_published_shows', 'edit_private_posts' => 'edit_private_shows', 'edit_published_posts' => 'edit_published_shows', 'delete_others_posts' => 'delete_others_shows'),	
+}
+add_action( 'init', 'sting_create_show_type' );
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));
 	$subtitle = substr($title, strpos($title, $sep), strlen($title));

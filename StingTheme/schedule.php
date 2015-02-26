@@ -2,18 +2,19 @@
 /*
 Template Name: Schedule Page
 */
+global $show_type;
 ?>
 <!--schedule.php -->
 <div class="row">
-<h2>Schedule</h2>
 <?php
 $args = array(
 	'posts_per_page'   => 100,
-	'post_type'        => 'page',
-	'post_parent'      => $post -> ID,
+	'post_type'        => $show_type,
 	'post_status'      => 'publish',
 );
+//	'post_parent'      => $post -> ID,
 $child_pages = get_posts( $args ); 
+$num_pages = count($child_pages);
 ?>
 
 <?php
@@ -38,7 +39,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'sunday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>
@@ -49,7 +50,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'monday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>
@@ -60,7 +61,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'tuesday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>
@@ -71,7 +72,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'wednesday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>
@@ -82,7 +83,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'thursday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>
@@ -93,7 +94,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'friday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>
@@ -104,7 +105,7 @@ $child_pages = get_posts( $args );
 				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'saturday';
-				$index = sting_display_show_schedule($current_day, $index, $child_pages);
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
                 <!-- END LOOP -->
 			</div>

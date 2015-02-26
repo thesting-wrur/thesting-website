@@ -8,7 +8,7 @@
 $id = get_queried_object_id();
 $page = get_post($id);
 if ($page -> post_parent == 2239 || $page -> post_parent == 2145) {
-	get_template_part('show', '');
+	get_template_part('single-show', '');
 } else {
 	get_template_part('normalPage','');
 }

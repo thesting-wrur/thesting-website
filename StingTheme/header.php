@@ -59,7 +59,11 @@
       </nav>
 	  <?php sting_display_mobile_menu();?>
     </div>
-	<?php/*
+	<div id="content">
+	<?php
 	 if (is_front_page()) {
 		//Main big blog page header
-	}*/
+		get_template_part('subTemplates/banners/banner', 'home');
+	} else {
+		get_template_part('subTemplates/banners/banner');
+	}
