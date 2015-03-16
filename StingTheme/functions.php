@@ -1,24 +1,37 @@
 <?php
 require_once 'foundation-press/menu-walker.php';
 require_once 'admin/admin.php';
+
 //enqueue styles
 function sting_enqueue_foundation_styles() {
 	wp_register_style('sting-foundation-app', get_template_directory_uri().'/css/app.css');
 	wp_register_style('sting-foundations-icons', get_template_directory_uri().'/css/foundation-icons.css');
-	wp_register_style('sting-google-font-railway', 'http://fonts.googleapis.com/css?family=Raleway:800');
-	wp_enqueue_style('sting-foundation-app');
+	wp_register_style('sting-font-raleway', get_template_directory_uri().'/css/raleway.css');
 	wp_enqueue_style('sting-foundation-icons');
-	wp_enqueue_style('sting-google-font-railway');
+	wp_enqueue_style('sting-font-raleway');
+	wp_enqueue_style('mediaelement');
+	wp_enqueue_style('sting-foundation-app');
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_styles');
 
 //enqueue scripts
 function sting_enqueue_foundation_script() {
 	wp_deregister_script('jquery');
-	wp_enqueue_script('jquery', get_template_directory_uri().'/js/jquery.min.js','','',true);
-	wp_enqueue_script('sting-foundation-js', get_template_directory_uri().'/js/foundation.js','','',true);
-	wp_enqueue_script('sting-modernizr', get_template_directory_uri().'/js/modernizr.js');
+	wp_enqueue_script('jquery', get_template_directory_uri().'/js/lib/jquery.min.js','','',true);
+	wp_enqueue_script('jquery-cookies', get_template_directory_uri().'/js/lib/jquery.cookie.js','','',true);
+	wp_enqueue_script('sting-foundation-js', get_template_directory_uri().'/js/lib/foundation.js','','',true);
+	wp_enqueue_script('sting-modernizr', get_template_directory_uri().'/js/lib/modernizr.js');
+	wp_enqueue_script('mediaelement');
 	wp_enqueue_script('sting-code', get_template_directory_uri().'/js/app.js','','',true);
+	wp_enqueue_script('sting-stream', get_template_directory_uri().'/js/stream.js','','',true);
+	
+	//enqueue listener count script only on the DJ on-air view page
+	if (stripos(get_page_template(), 'onAir') != 0) {
+		wp_register_script('listener-count', get_template_directory_uri().'/listen-count/livecounter.js');
+		wp_enqueue_script('listener-count');
+		$templateDir = get_template_directory_uri();
+		wp_localize_script('listener-count', 'stingTemplateDir', $templateDir);
+	}
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
@@ -58,7 +71,9 @@ function sting_display_mobile_menu() {
 
 function sting_homepage_category( $query ) {
     if ( $query->is_home() && $query->is_main_query() ) {
-        $query->set( 'cat', '3' );//make this the correct id
+		$admin_options = get_option('sting_admin_options');
+		$id = intval($admin_options['homepage_cat_input_box']);
+        $query->set( 'cat', $id);//make this the correct id
     }
 }
 add_action( 'pre_get_posts', 'sting_homepage_category' );
@@ -77,9 +92,9 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 		$stime1 = get_field('start_time', $show1 -> ID, false);
 		$stime2 = get_field('start_time', $show2 -> ID, false);
 		if ($stime1 < $stime2) {
-			return 1;
-		} else if ($stime1 > $stime2) {
 			return -1;
+		} else if ($stime1 > $stime2) {
+			return 1;
 		} else {
 			return 0;
 		}

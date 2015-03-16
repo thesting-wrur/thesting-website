@@ -1,7 +1,12 @@
 <!--start banner-home.php-->
 	<div class="home-banner">
-        <a class="article-link" href="#">
-          <img alt="Image of a large Studio" src="<?php echo get_template_directory_uri();?>/images/studio.jpg">
+        <a class="article-link">
+          <!--<img alt="Image of a large Studio" src="<php echo get_template_directory_uri();?>/images/studio.jpg">-->
+		  <?php
+			$admin_options = get_option('sting_admin_options');
+			if ( function_exists( "easingslider" ) ) {
+				easingslider( intval($admin_options['homepage_slider_id_input_box']));
+			} ?>
           <div class="hide-for-small-only">
             <div class="row">
                 <div class="large-12 columns">

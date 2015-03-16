@@ -1,25 +1,24 @@
 <?php
 //sting
-add_action('admin_init', 'sting_setup_options');
-$sting_page_name = 'services_options';
-function sting_setup_options() {
-	global $sting_page_name;
+add_action('admin_init', 'sting_setup_services_options');
+$sting_services_page_name = 'services_options';
+function sting_setup_services_options() {
+	global $sting_services_page_name;
 	register_setting('sting_services_options_group', 'sting_services_options', 'sting_services_process_input');
-	add_settings_section('content_settings', 'Content', 'setup_content_section', $sting_page_name);
-	add_settings_field('mlp_input', 'Meat Locker Productions Description:', 'mlp_input_box', $sting_page_name, 'content_settings');
-	add_settings_field('live_events_input', 'Live Events Description:', 'live_events_input_box', $sting_page_name, 'content_settings');
-	add_settings_field('show_dj_input', 'DJing a show Description:', 'show_dj_input_box', $sting_page_name, 'content_settings');
+	add_settings_section('content_settings', 'Page Content', 'setup_content_section', $sting_services_page_name);
+	add_settings_field('mlp_input', 'Meat Locker Productions Description:', 'mlp_input_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('live_events_input', 'Live Events Description:', 'live_events_input_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('show_dj_input', 'DJing a show Description:', 'show_dj_input_box', $sting_services_page_name, 'content_settings');
 }
-function create_options_page() {
-	global $sting_page_name;
-	global $sting_admin_slug;
-	//add_theme_page('More Options', 'More Options', 'edit_theme_options', $sting_page_name, 'create_sting_options_page');
-	add_submenu_page($sting_admin_slug, 'Services', 'Services', 'edit_theme_options', $sting_page_name, 'create_sting_options_page');
+function create_services_options_page() {
+	global $sting_services_page_name;
+	global $sting_admin_page_name;
+	add_submenu_page($sting_admin_page_name, 'Services', 'Services', 'edit_theme_options', $sting_services_page_name, 'create_sting_options_page');
 }
-add_action('admin_menu', 'create_options_page');
+//add_action('admin_menu', 'create_services_options_page');
 
 //input boxes
-$options = get_option('sting_services_options');
+$services_options = get_option('sting_services_options');
 function mlp_input_box() {
 	generate_editor('mlp');
 }
@@ -30,8 +29,8 @@ function live_events_input_box() {
 	generate_editor('live_events');
 }
 function generate_editor($slug) {
-	global $options;
-	$content = $options[$slug.'_input_box'];
+	global $services_options;
+	$content = $services_options[$slug.'_input_box'];
 	$editor_id = $slug.'_editor';
 	$args = array(
 		'textarea_name' => 'sting_services_options['.$slug.'_input_box]',
@@ -41,9 +40,12 @@ function generate_editor($slug) {
 }
 //end input boxes
 function setup_content_section() {
+	$query = new WP_Query('pagename=services');
+	$posts_retrieved = $query -> posts;
+	echo 'View the <a href="'.get_permalink($posts_retrieved[0] -> ID).'">Services Page</a>';
 }
 function create_sting_options_page() {
-	global $sting_page_name;
+	global $sting_services_page_name;
 	?>
 	<div class="wrap">
 		<h2>Services Page</h2>
@@ -51,7 +53,7 @@ function create_sting_options_page() {
 			<?php
 				settings_errors();
 				settings_fields('sting_services_options_group');
-				do_settings_sections($sting_page_name);
+				do_settings_sections($sting_services_page_name);
 				submit_button();
 			?>
 		</form>
@@ -60,6 +62,20 @@ function create_sting_options_page() {
 }
 /*Validate the input*/
 function sting_services_process_input($input) {
+	$output = array();
+	$complete_success = true;
+	foreach( $input as $key => $value) {
+		$result = $value;
+		$validated = wp_kses_post($result);
+		$output[$key] = $validated;
+		if ($validated != $result) {
+			add_settings_error($key, 'type-error', $key.' cannot contain dangerous html tags');
+		}
+	}
+	return $output;
+}
+/*old Validate the input*/
+function old_sting_services_process_input($input) {
 	$output = array();
 	$comlete_success = true;
 	foreach ($input as $key => $value) {

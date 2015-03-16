@@ -7,8 +7,9 @@ global $show_type;
 <!--schedule.php -->
 <div class="row">
 <?php
+$posts_to_get = get_option('sting_admin_options')[schedule_num_shows_input_box];
 $args = array(
-	'posts_per_page'   => 100,
+	'posts_per_page'   => $posts_to_get,
 	'post_type'        => $show_type,
 	'post_status'      => 'publish',
 );
@@ -23,7 +24,7 @@ $num_pages = count($child_pages);
 	$index = 0;
 ?>
 <div class="large-12 columns">
-	<ul class="tabs vertical" data-tab role="tablist">
+	<ul class="tabs horizontal" data-tab role="tablist">
 		<li class="tab-title"><a href="#sunday">Sunday</a></li>
 		<li class="tab-title"><a href="#monday">Monday</a></li>
 		<li class="tab-title"><a href="#tuesday">Tuesday</a></li>

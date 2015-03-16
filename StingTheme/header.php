@@ -9,6 +9,15 @@
 	<!--start wp_head() section -->
 	<?php wp_head(); ?>
 	<!--end wp_head() section -->
+	<style type='text/css'>
+	<!--
+	.easingslider {
+		margin: auto !important;
+		position: absolute !important;
+		top: 0px;
+		width: 100%;
+	}-->
+	</style>
   </head>
   <body <?php body_class(); ?>>
   
@@ -22,7 +31,7 @@
 
         <section class="top-bar-section">
           <ul class="right">
-            <li><a href="#">Listen Live</a></li>
+            <li><a onclick="toggleStream();">Listen Live</a></li>
           </ul>
 
 		<?php 
