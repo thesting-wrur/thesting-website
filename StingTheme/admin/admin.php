@@ -15,10 +15,49 @@ function sting_setup_admin_options() {
 	register_setting('sting_admin_options_group', 'sting_admin_options', 'sting_admin_process_input');
 	add_settings_section('admin_site_settings', 'Site Settings', 'setup_admin_content_section', $sting_admin_page_name);
 	add_settings_field('homepage_cat_input', 'Category of Posts to show on the Homepage:', 'homepage_cat_input_box', $sting_admin_page_name, 'admin_site_settings');
-	add_settings_field('schedule_num_shows', 'Number of shows for the schedule page to request:', 'schedule_num_shows_input_box', $sting_admin_page_name, 'admin_site_settings');
+	add_settings_field('num_shows', 'Number of shows to request at a time (make this large):', 'num_shows_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('homepage_slider_id', 'Slider to show on the homepage:', 'homepage_slider_id_input_box', $sting_admin_page_name, 'admin_site_settings');
+	add_settings_field('sting_header_image', 'Default Header Image:', 'sting_header_image_input_box', $sting_admin_page_name, 'admin_site_settings');
 }
 add_action('admin_init', 'sting_setup_admin_options');
+//Start setup for media uploader
+function sting_setup_media_scripts($page) {
+		global $sting_admin_page_name;
+		$temp_page_name = 'toplevel_page_'.$sting_admin_page_name;
+		if ($page == $temp_page_name) {
+			wp_register_script('sting_media_upload', get_template_directory_uri().'/admin/js/media_upload.js', array('jquery', 'media-upload', 'thickbox'));
+			wp_enqueue_script('jquery');
+			wp_enqueue_script('thickbox');
+			wp_enqueue_script('media-upload');
+			wp_enqueue_script('sting_media_upload');
+			wp_enqueue_style('thickbox');
+		}
+}
+add_action('admin_enqueue_scripts', 'sting_setup_media_scripts');
+function sting_setup_thickbox() {
+	global $pagenow;
+	if ('media-upload.php' == $pagenow || 'async-upload.php' == $pagenow) {
+		// Now we'll replace the 'Insert into Post Button' inside Thickbox
+        add_filter( 'gettext', 'sting_rename_thickbox_button'  , 1, 3 );
+	}
+}
+add_action('admin_init', sting_setup_thickbox);
+function sting_modify_thickbox($form_fields, $post) {
+	$form_fields['buttons'] = "<input type='submit' class='button' value='Select Image' />";
+	return $form_fields;
+}
+add_filter('attachment_files_to_edit', 'sting_modify_thickbox');
+function sting_rename_thickbox_button($translated_text, $text, $domain) {
+	if ('Insert into Post' == $text) {
+		$referer = strpos(wp_get_referer(), $sting_page_name);
+		if ($referer != '') {
+			return __('Upload Header image');
+		}
+	}
+	return $translated_text;
+}
+//end setup for media uploader
+//input boxes
 $admin_options = get_option('sting_admin_options');
 function homepage_cat_input_box() {
 	global $admin_options;
@@ -31,9 +70,9 @@ function homepage_cat_input_box() {
 		);
 	wp_dropdown_categories($args);
 }
-function schedule_num_shows_input_box() {
+function num_shows_input_box() {
 	global $admin_options;
-	echo "<input name='sting_admin_options[schedule_num_shows_input_box]' type='text' value='{$admin_options['schedule_num_shows_input_box']}' />";
+	echo "<input name='sting_admin_options[num_shows_input_box]' type='text' value='{$admin_options['num_shows_input_box']}' />";
 }
 function homepage_slider_id_input_box() {
 	global $admin_options;
@@ -51,6 +90,18 @@ function homepage_slider_id_input_box() {
 		echo '</option>';
 	}
 	echo '</select>';
+}
+function sting_header_image_input_box() {
+	image_input_box('sting_header_image_input_box', 'main');
+}
+function image_input_box($box, $id) {
+	global $admin_options;
+	echo "Preview of Current Image:";
+	echo "<img src='".$admin_options[$box]."' id='".$id."_image_preview' width='240' style='vertical-align: middle;'/>";
+	echo "<br /><br />";
+	echo "Select a new image:";
+	echo "<input name='sting_admin_options[".$box."]' id='url_box_".$id."' type='text' value='{$admin_options[$box]}' />";
+	echo "<input id='upload_".$id."_background_button' type='button' class='button' value='Select or Upload Image' />";
 }
 function setup_admin_content_section() {
 }

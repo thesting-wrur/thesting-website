@@ -141,6 +141,17 @@ function sting_create_show_type() {
 //'capabilities'		  => array('edit_post' => 'edit_show', 'read_post' => 'read_show', 'delete_post' => 'delete_show', 'edit_others_posts' => 'edit_others_shows', 'publish_posts' => 'publish_shows', 'read_private_posts' => 'read_private_shows', 'read' => 'read', 'delete_posts' => 'delete_shows', 'delete_private_posts' => 'delete_private_shows', 'delete_published_posts' => 'delete_published_shows', 'edit_private_posts' => 'edit_private_shows', 'edit_published_posts' => 'edit_published_shows', 'delete_others_posts' => 'delete_others_shows'),	
 }
 add_action( 'init', 'sting_create_show_type' );
+
+function sting_get_header_image() {
+	$admin_options = get_option('sting_admin_options');
+	if (get_field('header-image', $id) != '') {
+		return get_field('header-image', $id);
+	} else {
+		return $admin_options['sting_header_image_input_box'];
+	}
+	//echo get_template_directory_uri().'/images/studio.jpg';
+}
+
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));
 	$subtitle = substr($title, strpos($title, $sep), strlen($title));

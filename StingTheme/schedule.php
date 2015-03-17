@@ -7,7 +7,7 @@ global $show_type;
 <!--schedule.php -->
 <div class="row">
 <?php
-$posts_to_get = get_option('sting_admin_options')[schedule_num_shows_input_box];
+$posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];
 $args = array(
 	'posts_per_page'   => $posts_to_get,
 	'post_type'        => $show_type,

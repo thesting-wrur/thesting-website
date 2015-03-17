@@ -18,7 +18,7 @@ function toggleStream() {
 		stream.play();
 		saveState(true);
 	} else {
-		stream.stop();
+		stream.pause();
 		saveState(false);
 	}
 }
