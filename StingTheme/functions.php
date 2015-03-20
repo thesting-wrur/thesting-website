@@ -23,6 +23,7 @@ function sting_enqueue_foundation_script() {
 	wp_enqueue_script('sting-modernizr', get_template_directory_uri().'/js/lib/modernizr.js');
 	wp_enqueue_script('mediaelement');
 	wp_enqueue_script('sting-code', get_template_directory_uri().'/js/app.js','','',true);
+	wp_enqueue_script('sting-homepage-layout', get_template_directory_uri().'/js/post.js','','',true);
 	wp_enqueue_script('sting-stream', get_template_directory_uri().'/js/stream.js','','',true);
 	
 	//enqueue listener count script only on the DJ on-air view page
