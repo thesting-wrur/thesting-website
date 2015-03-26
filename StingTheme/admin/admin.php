@@ -1,5 +1,7 @@
 <?php
 require_once 'services-admin.php';
+require_once 'calendar-admin.php';
+require_once 'calendar-auth.php';
 //setup the parent page, then the child pages
 $sting_admin_page_name = 'sting_admin';
 function register_sting_admin_page() {
@@ -8,7 +10,9 @@ function register_sting_admin_page() {
 	add_submenu_page($sting_admin_page_name, 'Sting Admin', 'Admin', 'edit_theme_options', $sting_admin_page_name);
 }
 add_action( 'admin_menu', 'register_sting_admin_page' );
-add_action('admin_menu', 'create_services_options_page');
+add_action('admin_menu', 'create_sting_services_options_page');
+add_action('admin_menu', 'create_calendar_admin_page');
+add_action('admin_menu', 'create_calendar_auth_page');
 //setup the parent page, then the child pages
 function sting_setup_admin_options() {
 	global $sting_admin_page_name;
@@ -41,7 +45,7 @@ function sting_setup_thickbox() {
         add_filter( 'gettext', 'sting_rename_thickbox_button'  , 1, 3 );
 	}
 }
-add_action('admin_init', sting_setup_thickbox);
+add_action('admin_init', 'sting_setup_thickbox');
 function sting_modify_thickbox($form_fields, $post) {
 	$form_fields['buttons'] = "<input type='submit' class='button' value='Select Image' />";
 	return $form_fields;

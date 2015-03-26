@@ -1,6 +1,8 @@
 <?php
-require_once 'foundation-press/menu-walker.php';
+require_once 'php-lib/foundation-press/menu-walker.php';
+require_once 'php-lib/google-api-php-client/src/Google/autoload.php';
 require_once 'admin/admin.php';
+require_once 'admin/calendar-push.php';
 
 //enqueue styles
 function sting_enqueue_foundation_styles() {
@@ -112,7 +114,7 @@ function sting_display_show_schedule($day_of_week, $index, $child_pages, $num_pa
 			break;
 		}
 		echo '<div class="post">';
-		echo get_field('start_time', $current_page -> ID).' - '.get_field('end_time', $current_page -> ID);
+		echo get_field('start_time', $current_page -> ID, false).' - '.get_field('end_time', $current_page -> ID);
 		echo '<a href="'.get_permalink($current_page -> ID).'">'.$current_page -> post_title;
 		echo '</a>';
 		$wp_post_var = $post;//$post is a global variable in wordpress. We need to reset it back to what it was or other parts of wordpress WILL BREAK
@@ -152,6 +154,18 @@ function sting_get_header_image() {
 	}
 	//echo get_template_directory_uri().'/images/studio.jpg';
 }
+
+function sting_push_show_time_to_gcal($post_id, $post_obj, $updated) {
+	global $show_type;
+	//error_log ($post_obj -> post_type);
+	//error_log ($show_type);
+	if (($post_obj -> post_type) === $show_type) {
+		sting_setup_gcal();
+		sting_push_post_to_gcal($post_id, $post_obj);
+		//error_log('var1 = '.$var1.' var2 = '.$var2 -> post_title);
+	}
+}
+add_action('save_post', 'sting_push_show_time_to_gcal', 11, 3);
 
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));

@@ -10,12 +10,11 @@ function sting_setup_services_options() {
 	add_settings_field('live_events_input', 'Live Events Description:', 'live_events_input_box', $sting_services_page_name, 'content_settings');
 	add_settings_field('show_dj_input', 'DJing a show Description:', 'show_dj_input_box', $sting_services_page_name, 'content_settings');
 }
-function create_services_options_page() {
+function create_sting_services_options_page() {
 	global $sting_services_page_name;
 	global $sting_admin_page_name;
-	add_submenu_page($sting_admin_page_name, 'Services', 'Services', 'edit_theme_options', $sting_services_page_name, 'create_sting_options_page');
+	add_submenu_page($sting_admin_page_name, 'Services', 'Services', 'edit_theme_options', $sting_services_page_name, 'create_services_options_page');
 }
-//add_action('admin_menu', 'create_services_options_page');
 
 //input boxes
 $services_options = get_option('sting_services_options');
@@ -44,7 +43,7 @@ function setup_content_section() {
 	$posts_retrieved = $query -> posts;
 	echo 'View the <a href="'.get_permalink($posts_retrieved[0] -> ID).'">Services Page</a>';
 }
-function create_sting_options_page() {
+function create_services_options_page() {
 	global $sting_services_page_name;
 	?>
 	<div class="wrap">
