@@ -11,10 +11,10 @@ $(document).ready(function() {
     // if scroll to the bottom
     if($(window).scrollTop() >= $(document).height() - $(window).height()) {
       page++;
-      $.get("page/"+page).done(function(data) {
+      $.get("page/"+page, function(data) {
         console.log('data ' + page);
-      }).fail(function(data) {
-        console.log('error');
+      }, function(data) {
+        console.log('error?');
       });
     }
   });

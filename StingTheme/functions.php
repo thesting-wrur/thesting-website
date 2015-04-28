@@ -2,7 +2,6 @@
 require_once 'php-lib/foundation-press/menu-walker.php';
 require_once 'php-lib/google-api-php-client/src/Google/autoload.php';
 require_once 'admin/admin.php';
-require_once 'admin/calendar-push.php';
 
 //enqueue styles
 function sting_enqueue_foundation_styles() {
@@ -10,6 +9,7 @@ function sting_enqueue_foundation_styles() {
 	wp_register_style('sting-foundations-icons', get_template_directory_uri().'/css/foundation-icons.css');
 	wp_register_style('sting-font-raleway', get_template_directory_uri().'/css/raleway.css');
 	wp_enqueue_style('sting-foundation-icons');
+	wp_enqueue_style('dashicons');
 	wp_enqueue_style('sting-font-raleway');
 	wp_enqueue_style('mediaelement');
 	wp_enqueue_style('sting-foundation-app');
@@ -22,19 +22,15 @@ function sting_enqueue_foundation_script() {
 	wp_enqueue_script('jquery', get_template_directory_uri().'/js/lib/jquery.min.js','','',true);
 	wp_enqueue_script('jquery-cookies', get_template_directory_uri().'/js/lib/jquery.cookie.js','','',true);
 	wp_enqueue_script('sting-foundation-js', get_template_directory_uri().'/js/lib/foundation.js','','',true);
+	wp_enqueue_script('sting-foundation-tab-js', get_template_directory_uri().'/js/lib/foundation.tab.js','','',true);
+	wp_enqueue_script('sting-foundation-accordion-js', get_template_directory_uri().'/js/lib/foundation.accordion.js','','',true);
 	wp_enqueue_script('sting-modernizr', get_template_directory_uri().'/js/lib/modernizr.js');
 	wp_enqueue_script('mediaelement');
 	wp_enqueue_script('sting-code', get_template_directory_uri().'/js/app.js','','',true);
 	wp_enqueue_script('sting-homepage-layout', get_template_directory_uri().'/js/post.js','','',true);
 	wp_enqueue_script('sting-stream', get_template_directory_uri().'/js/stream.js','','',true);
-	
-	//enqueue listener count script only on the DJ on-air view page
-	if (stripos(get_page_template(), 'onAir') != 0) {
-		wp_register_script('listener-count', get_template_directory_uri().'/listen-count/livecounter.js');
-		wp_enqueue_script('listener-count');
-		$templateDir = get_template_directory_uri();
-		wp_localize_script('listener-count', 'stingTemplateDir', $templateDir);
-	}
+	wp_enqueue_script('sting-now-playing', get_template_directory_uri().'/js/now-playing.js','','',true);
+	wp_localize_script('sting-now-playing', 'adminAjaxUrl', admin_url( 'admin-ajax.php' ));
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
@@ -61,11 +57,11 @@ function sting_display_mobile_menu() {
 		$menu_item_classes = '"button button-dark menu-item"';
 		$menu_list .= '<a class='.$menu_item_classes.' href="'.get_site_url().'">'.'Home'.'</a>';
 		foreach ( (array) $menu_items as $key => $menu_item ) {
-			if ($menu_item -> post_parent == 0) {
+			//if ($menu_item -> post_parent == 0) {
 				$title = $menu_item->title;
 				$url = $menu_item->url;
 				$menu_list .= '<a class='.$menu_item_classes.' href="' . $url . '">' . $title . '</a>';
-			}
+			//}
 		}
 		$menu_list .= '</div>';
     }
@@ -104,26 +100,53 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 	}
 	return 0;
 }
-function sting_display_show_schedule($day_of_week, $index, $child_pages, $num_pages) {
+function sting_display_show_schedule($day_of_week, $index, $child_pages, $num_pages, $isMobile = false) {
 	global $post;//Will be modified later on, then reverted to what it was. If we don't do this, we will break wordpress
 	//Post refers to the current post. We temporarily use it to refer to another post, and then revert it.
-	for (;$index < $num_pages;$index++) {
-		$current_page = $child_pages[$index];
-		$day = get_field('day', $current_page -> ID);
-		if (strcmp($day, $day_of_week) != 0) {
-			break;
+	$initial_index = $index;
+		for (;$index < $num_pages; $index++) {
+			$current_page = $child_pages[$index];
+			$day = get_field('day', $current_page -> ID);
+			if (strcmp($day, $day_of_week) != 0) {
+				if ($index == $initial_index) {
+					echo '<div class="post row">';
+					echo '<div class="large-4 medium-4 columns">';
+					echo 'No shows on '.ucfirst($day_of_week);
+					echo '</div></div>';
+				}
+				break;
+			}
+			echo '<div class="post row">';
+			if ($isMobile) {
+				displayShowTitle($current_page, $isMobile);
+				displayShowTime($current_page);
+			} else {
+				displayShowTime($current_page);
+				displayShowTitle($current_page, $isMobile);
+			}
+			echo '<div class="large-4 medium-4 columns show-host">';
+			$wp_post_var = $post;//$post is a global variable in wordpress. We need to reset it back to what it was or other parts of wordpress WILL BREAK
+			$post = $current_page;//Setting it to the current page
+			echo coauthors(', ', ' and ', '', '', false);
+			echo '</div>';
+			$post = $wp_post_var;//Resetting it
+			echo '</div>';
 		}
-		echo '<div class="post">';
-		echo get_field('start_time', $current_page -> ID, false).' - '.get_field('end_time', $current_page -> ID);
-		echo '<a href="'.get_permalink($current_page -> ID).'">'.$current_page -> post_title;
-		echo '</a>';
-		$wp_post_var = $post;//$post is a global variable in wordpress. We need to reset it back to what it was or other parts of wordpress WILL BREAK
-		$post = $current_page;//Setting it to the current page
-		echo coauthors(',', ' and ', ' - ', '', false);
-		$post = $wp_post_var;//Resetting it
-		echo '</div>';
-	}
 	return $index;
+}
+
+function displayShowTime($current_page) {
+	echo '<div class="large-4 medium-4 columns show-time">';
+	echo get_field('start_time', $current_page -> ID).' - '.get_field('end_time', $current_page -> ID);
+	echo '</div>';
+}
+function displayShowTitle($current_page, $isMobile) {
+	echo '<div class="large-4 medium-4 columns show-title">';
+	echo $isMobile == true ? '<h2>' : '';
+	echo '<a href="'.get_permalink($current_page -> ID).'">'.$current_page -> post_title;
+	echo '</a>';
+	echo $isMobile == true ? '</h2>' : '';
+	echo '</div>';
 }
 $show_type = 'sting_shows';
 function sting_create_show_type() {
@@ -159,13 +182,90 @@ function sting_push_show_time_to_gcal($post_id, $post_obj, $updated) {
 	global $show_type;
 	//error_log ($post_obj -> post_type);
 	//error_log ($show_type);
-	if (($post_obj -> post_type) === $show_type) {
+	$gcal_id = get_post_meta($post_id, 'gcal_event_id', true);
+	//error_log($gcal_id);
+	$post_status = get_post_status($post_id);
+	if (($post_obj -> post_type) === $show_type && ($post_status == 'publish' || $post_status == 'future') && ($gcal_id == '')) {//stops drafts from getting pushed to the calendar
 		sting_setup_gcal();
 		sting_push_post_to_gcal($post_id, $post_obj);
 		//error_log('var1 = '.$var1.' var2 = '.$var2 -> post_title);
 	}
 }
 add_action('save_post', 'sting_push_show_time_to_gcal', 11, 3);
+
+function setup_gcal_client() {
+	$calendar_options = get_option('sting_calendar_options');
+	$cal_auth_info = get_option('sting_calendar_auth');
+	$client = new Google_Client();
+	// OAuth2 client ID and secret can be found in the Google Developers Console.
+	$client->setClientId($calendar_options['client_id_input_box']);
+	$client->setClientSecret($calendar_options['client_secret_input_box']);
+	//$client->setRedirectUri(site_url().'/wp-admin/admin.php?page=calendar_auth');
+	$client->setRedirectUri('http://localhost/bl_site/wp-admin/admin.php?page=calendar_auth');
+	$client->addScope('https://www.googleapis.com/auth/calendar');
+	$client->setAccessType('offline');
+	$client->setApprovalPrompt('force');
+	
+	$accessToken = $cal_auth_info['access_token_input_box'];
+	
+	$refreshToken = $cal_auth_info['refresh_token_input_box'];
+	
+	$client->setAccessToken($accessToken);
+	if ($client->isAccessTokenExpired()) {
+		$client->refreshToken($refreshToken);
+		$client->setAccessToken($client->getAccessToken());
+	}
+	return $client;
+}
+
+//setup ajax for live-updating the current show
+add_action( 'wp_ajax_current_show', 'send_now_playing_data' );
+add_action( 'wp_ajax_nopriv_current_show', 'send_now_playing_data' );
+
+function send_now_playing_data() {
+	global $gcal_service;
+	global $sting_artist_field_name;//defined in /admin/dashboard/now-playing.php
+	global $sting_title_field_name;//defined in /admin/dashboard/now-playing.php
+	global $sting_widget_id;//defined in /admin/dashboard/now-playing.php
+	global $sting_show_title;//defined in /admin/dashboard/now-playing.php
+	////Pull the current show from google calendar
+	$calendar_options = get_option('sting_calendar_options');
+	sting_setup_gcal();
+	$now = new DateTime('now', new DateTimeZone('America/New_York'));
+	$timeMin = $now->format(DateTime::ISO8601);
+	$date_interval = new DateInterval('PT1M');
+	$now->add($date_interval);
+	$timeMax = $now->format(DateTime::ISO8601);
+	$shows = $gcal_service->events->listEvents($calendar_options['calendar_id_input_box'],array('showDeleted' => 'false', 'showHiddenInvitations' => false, 'singleEvents' => false, 'timeMax' => $timeMax, 'timeMin' => $timeMin));
+	$show_list = array();
+	foreach($shows as $show) {//filter out deleted shows. not sure why showDeleted doesn't work
+		if ($show->getStatus() == 'confirmed') {
+			array_push($show_list, $show);
+		}
+	}
+	$current_show = $show_list[0];
+	$title = $current_show == null ? '' : $current_show->getSummary();//stops fatal error due to there being no shows on the air right now.
+	if ($title == '') {
+		$title = 'The Sting';
+	} else {
+		$title = substr($title, 0,  strripos($title, '-') - 2);
+	}
+	$toSend = array(
+		$sting_artist_field_name	=>	get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name),
+		$sting_title_field_name 	=>	get_dashboard_widget_option($sting_widget_id, $sting_title_field_name),
+		$sting_show_title			=> $title,
+	);
+	
+	//error_log(var_export($toSend, true));
+	//error_log(get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name));
+	//error_log(get_dashboard_widget_option($sting_widget_id, $sting_title_field_name));
+	echo json_encode($toSend);
+	wp_die();
+}
+
+function sting_get_admin_message () {
+	return '';
+}
 
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));

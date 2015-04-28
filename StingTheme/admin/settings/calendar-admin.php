@@ -36,7 +36,7 @@ function client_secret_input_box() {
 }
 
 function setup_gcal_scripts($hook) {
-	error_log($hook);
+	//error_log($hook);
 	if ($hook === 'sting_page_calendar_options') {
 		wp_enqueue_script('sting_google_auth', get_template_directory_uri().'/admin/js/google_auth.js');
 	}
@@ -44,16 +44,8 @@ function setup_gcal_scripts($hook) {
 add_action ('admin_enqueue_scripts', 'setup_gcal_scripts', 10, 1);
 
 function setup_gcal_window() {
-	global $calendar_options;
-	$client = new Google_Client();
-	// OAuth2 client ID and secret can be found in the Google Developers Console.
-	$client->setClientId($calendar_options['client_id_input_box']);
-	$client->setClientSecret($calendar_options['client_secret_input_box']);
-	//$client->setRedirectUri('https://thesting.wrur.org');
-	$client->setRedirectUri('http://localhost/bl_site/wp-admin/admin.php?page=calendar_auth');
-	$client->addScope('https://www.googleapis.com/auth/calendar');
-	$client->setAccessType('offline');
-	$client->setApprovalPrompt('force');
+	$client = setup_gcal_client();
+	
 	$url = $client->createAuthUrl();
 	$url = '\''.$url.'\'';
 	echo '<a href="javascript:openGoogleAuth('.$url.');" class="button button-primary" style="margin-top: 10px;">Authenticate</a>';

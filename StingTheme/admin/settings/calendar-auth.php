@@ -5,7 +5,7 @@ function sting_setup_calendar_auth() {
 	global $calendar_auth_page_name;
 	register_setting('sting_calendar_auth_group', 'sting_calendar_auth', 'sting_calendar_auth_process_input');
 
-	$calendar_second_auth_section = 'second_auth_settings';	
+	$calendar_second_auth_section = 'second_auth_settings';
 	add_settings_section($calendar_second_auth_section, 'Calendar Authentication', 'setup_second_auth_section', $calendar_auth_page_name);
 	add_settings_field('access_token', 'Access Token:', 'access_token_input_box', $calendar_auth_page_name, $calendar_second_auth_section);
 	add_settings_field('refresh_token', 'Refresh Token:', 'refresh_token_input_box', $calendar_auth_page_name, $calendar_second_auth_section);
@@ -31,13 +31,15 @@ $calendar_auth_options = get_option('sting_calendar_auth');
 
 function access_token_input_box() {
 	global $calendar_auth_options;
-	echo "The content in this field is hidden from view as it is put there by javascript.";
+	echo 'The content in this field is hidden from view as it is put there by javascript.';
+	echo '<br>';
 	echo "<input name='sting_calendar_auth[access_token_input_box]' type='text' id='access_token' value='{$calendar_auth_options['access_token_input_box']}' />";
 }
 
 function refresh_token_input_box() {
 	global $calendar_auth_options;
-	echo "The content in this field is hidden from view as it is put there by javascript.";
+	echo 'The content in this field is hidden from view as it is put there by javascript.';
+	echo '<br>';
 	echo "<input name='sting_calendar_auth[refresh_token_input_box]' type='text' id='refresh_token' value='{$calendar_auth_options['refresh_token_input_box']}' />";
 }
 function setup_second_auth_section() {}
@@ -62,6 +64,22 @@ function create_calendar_second_auth_page() {
 }
 
 function sting_calendar_auth_process_input($input) {
+	$client = setup_gcal_client();
+	$authCode = $input['access_token_input_box'];
+	
+	if (json_decode($authCode) != null) {//key and token exchange has already taken place.
+		return $input;
+	}
+	
+	error_log($authCode);
+	$accessToken = $client->authenticate($authCode);
+	$parsedToken = json_decode($accessToken);
+	error_log(var_export($parsedToken, true));
+	$refreshToken = $parsedToken -> refresh_token;
+	error_log($refreshToken);
+	
+	$input['access_token_input_box'] = $accessToken;
+	$input['refresh_token_input_box'] = $refreshToken;
 	return $input;
 }
 

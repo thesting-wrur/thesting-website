@@ -17,3 +17,30 @@ $(document).ready(function() {
     }
   });
 });
+var chatVisible = false;
+function toggleChat() {
+	if (chatVisible) {
+		$("#quick-chat-dropdown").fadeOut("slow");
+		$("#chat-button a")[0].innerHTML = "Chat with the DJ";
+	} else {
+		$(".quick-chat-loading").attr("style", "display: none;");
+		$("#quick-chat-dropdown").fadeIn("slow", function() {
+			$(".quick-chat-history-container").scrollTop($(".quick-chat-history-container").get()[0].scrollHeight);
+		});
+		$("#chat-button a")[0].innerHTML = "Hide Chat";
+	}
+	chatVisible = !chatVisible;
+}
+function showNowPlaying() {
+	console.log("Showing Now Playing");
+	$("#nowPlaying").fadeIn("slow");
+}
+function hideNowPlaying() {
+	console.log("Hiding Now Playing");
+	$("#nowPlaying").fadeOut("slow");
+}
+$(document).ready(function() {
+	$("#menu-bar").mouseleave(function() {
+		hideNowPlaying();
+	});
+});

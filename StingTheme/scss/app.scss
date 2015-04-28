@@ -48,8 +48,19 @@ h1.title, li.name h1 {
   font-size: 30px !important;
   font-weight: 800;
   text-rendering: geometricPrecision;
+  color: #FFFFFF;
 }
 
+li.name h1 span.home-name {
+	padding-left: 20px;
+	padding-right: 20px;
+	font-size: 30px;
+	font-weight: 800;
+}
+
+#mobile-title a{
+	color: #FFFFFF;
+}
 
 
 /* TOP-BAR FILL */
@@ -111,7 +122,7 @@ h1.title, li.name h1 {
 /* SPACE FILLER AT BOTTOM OF CONTENT */
 
 .space-filler {
-  height: 70px;
+  height: 54px;
   position: relative;
 }
 
@@ -127,8 +138,10 @@ h1.title, li.name h1 {
 }
 
 .stream-button {
-  margin-bottom: 0;
+  margin-bottom: 0px;
   width: 100%;
+  padding-top: 27px;
+  padding-bottom: 28px;
 }
 
 .stream-button, .stream-button:visited {
@@ -139,6 +152,18 @@ h1.title, li.name h1 {
   background-color: $jet;
 }
 
+#mobile-listen-live-panel {
+	padding-top: 5px;
+	padding-bottom: 8px !important;
+}
+
+#desktop-play-pause-outer .dashicons {
+	vertical-align: middle;
+}
+#mobile-listen-live-panel .dashicons {
+	font-size: 18pt;
+	line-height: 18pt;
+}
 
 
 /* MAIN CONTENT */
@@ -165,8 +190,12 @@ h1.title, li.name h1 {
   width: 100%;
 }
 
-.home-banner-small {
+.home-banner-small, .show-banner-small {
   background-color: $jet;
+}
+
+.show-banner-small p {
+	padding-left: 60px;
 }
 
 .page-banner {
@@ -176,8 +205,29 @@ h1.title, li.name h1 {
   overflow: hidden;
   width: 100%;
 }
+@media only screen and (max-width: 40em){
+	.page-banner {
+		height: 40vw;
+		max-height: 300px;
+	}
+}
 
-.home-banner, .home-banner-small, .page-banner {
+.show-banner {
+  position: relative;
+  height: 60vw;
+  max-height: 380px;
+  overflow: hidden;
+  width: 100%;
+}
+.show-banner h1 {
+	text-transform: uppercase;
+}
+.show-banner p, .show-banner h1 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.home-banner, .home-banner-small, .page-banner, .show-banner, .show-banner-small {
   h1, p {
     color: $body-bg;
   }
@@ -191,7 +241,7 @@ h1.title, li.name h1 {
   }
 }
 
-.home-banner, .page-banner {
+.home-banner, .page-banner, .show-banner {
   img {
     bottom: 0;
     margin: auto;
@@ -233,7 +283,7 @@ h1.title, li.name h1 {
   }
 }
 
-.home-banner .columns {
+.home-banner, .show-banner .columns {
   text-align: left;
 }
 
@@ -300,6 +350,42 @@ a.article-link:hover {
   padding: 0;
 }
 
+.tabs-content .post {
+	line-height: 2em;
+}
+.tab-title {
+	width: 14.285714%;
+}
+
+.tab-title a {
+	text-align: center;
+}
+
+#schedule-container {
+	border-left-width: 1pt;
+	border-right-width: 1pt;
+	border-bottom-width: 1pt;
+	border-left-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-radius: 3px;
+	border-color: #CCCCCC;
+	
+	padding: 0px;
+}
+
+.accordion {
+	font-size: 14pt;
+	margin-left: 0px;
+}
+.show-title {
+	font-weight: bold;
+}
+.accordion .show-title {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-weight: normal;
+}
 
 /* MediaElement.js formatting */
 
@@ -308,4 +394,75 @@ a.article-link:hover {
 }
 .mejs-container {
 	display:none;
+}
+
+.show-description p{
+	font-size: 18px;
+	margin-bottom: 0px;
+	padding: 5px;
+}
+/*
+ * Now Playing bar
+ * @media only screen and (max-width: 40em)
+ */
+ #nowPlaying {
+	display: none;
+ }
+.now-playing ul li {
+	color: #FFFFFF;
+	background-color: $jet;
+	line-height: 3.75rem;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.now-playing ul li span {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+/* Dropdown Chat */
+#quick-chat-dropdown {
+	top: 120px;
+	right: 0px;
+	position: fixed;
+	width: 350px;
+	background-color: rgba($jet, 0.9);
+	display: none;
+	padding-right: 5px;
+	padding-top: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-bottom-left-radius: 5px;
+	border-color: #222222;
+	color: #FFFFFF;
+	box-shadow: -3px 5px 20px #222222;
+}
+input.quick-chat-alias {
+	height: 2em;
+}
+#chat-button {
+	padding-right: 0px;
+}
+
+/*
+ * Temporary Content Feed
+ */
+.wp-post-image {
+	height: 200px;
+}
+.post h2 {
+	font-size: 2rem;
+	font-weight: normal;
+	margin-top: 5px;
+	margin-bottom: 0px;
+}
+article.post {
+	margin-bottom: 20px;
+}
+.next-previous .left {
+	text-align: left;
+}
+.next-previous .right {
+	text-align: right;
 }

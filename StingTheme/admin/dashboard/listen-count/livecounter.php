@@ -19,17 +19,18 @@ function getNumberOfListeners() {
         }
 
 	$numb = $stuff;
+	$toReturn = '';
 	//echo '<marquee width="25%" behavior="alternate">';
 	if($numb=='1') {
-		echo "There is <b>1</b> listener";
+		$toReturn .= "There is <strong>1</strong> listener";
 	} else if ($numb == '0') {
-		echo "There are <b>no</b> listeners";
+		$toReturn .= "There are <strong>no</strong> listeners";
 	} else {
-		echo "There are <b>".$numb."</b> listeners";
+		$toReturn .= "There are <strong>".$numb."</strong> listeners";
 	}
 	//echo '</marquee>';
-  echo "<br>";
-  
+  echo $toReturn;
+  wp_die();
 }
 
 function getNumberOfLiveListeners() {
@@ -64,5 +65,5 @@ function curl($url) {
         curl_close($ch);
         return $data;
  }
-getNumberOfListeners();
+//getNumberOfListeners();
 ?>

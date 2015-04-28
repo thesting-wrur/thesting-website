@@ -20,100 +20,195 @@ $num_pages = count($child_pages);
 
 <?php
 	usort($child_pages, "sting_compare_shows_by_date_time");
-	//var_dump($child_pages);
+	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+	$now = new DateTime('now', new DateTimeZone('America/New_York'));
+	$today = $days[intval($now->format("w"))];
+	error_log($today);
 	$index = 0;
 ?>
-<div class="large-12 columns">
+<!--big devices-->
+<div class="large-12 columns hide-for-small-only" id="schedule-container">
 	<ul class="tabs horizontal" data-tab role="tablist">
-		<li class="tab-title"><a href="#sunday">Sunday</a></li>
-		<li class="tab-title"><a href="#monday">Monday</a></li>
-		<li class="tab-title"><a href="#tuesday">Tuesday</a></li>
-		<li class="tab-title"><a href="#wednesday">Wednesday</a></li>
-		<li class="tab-title"><a href="#thursday">Thursday</a></li>
-		<li class="tab-title"><a href="#friday">Friday</a></li>
-		<li class="tab-title active"><a href="#saturday">Saturday</a></li>
+		<?php
+			$current_day = 'sunday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#sunday">Sunday</a></li>
+		<?php
+			$current_day = 'monday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#monday">Monday</a></li>
+		<?php
+			$current_day = 'tuesday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#tuesday">Tuesday</a></li>
+		<?php
+			$current_day = 'wednesday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#wednesday">Wednesday</a></li>
+		<?php
+			$current_day = 'thursday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#thursday">Thursday</a></li>
+		<?php
+			$current_day = 'friday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#friday">Friday</a></li>
+		<?php
+			$current_day = 'saturday';
+		?>
+		<li class="tab-title<?php echo $current_day == $today ? ' active' :''?>"><a href="#saturday">Saturday</a></li>
 	</ul>
 	<div class="tabs-content">
-		<div class="content" id="sunday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'sunday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="sunday">
+			<div class="medium-12 large-12 columns">
 				<h3>Sunday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
-				$current_day = 'sunday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
-		<div class="content" id="monday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'monday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="monday">
+			<div class="medium-12 large-12 columns">
 				<h3>Monday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
-				$current_day = 'monday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
-		<div class="content" id="tuesday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'tuesday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="tuesday">
+			<div class="medium-12 large-12 columns">
 				<h3>Tuesday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
-				$current_day = 'tuesday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
-		<div class="content" id="wednesday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'wednesday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="wednesday">
+			<div class="medium-12 large-12 columns">
 				<h3>Wednesday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
-				$current_day = 'wednesday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
-		<div class="content" id="thursday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'thursday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="thursday">
+			<div class="medium-12 large-12 columns">
 				<h3>Thursday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
-				$current_day = 'thursday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
-		<div class="content" id="friday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'friday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="friday">
+			<div class="medium-12 large-12 columns">
 				<h3>Friday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
-				$current_day = 'friday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
-		<div class="content active" id="saturday">
-			<div class="medium-9 large-9 columns">
+		<?php
+			$current_day = 'saturday';
+		?>
+		<div class="content<?php echo $current_day == $today ? ' active' :''?>" id="saturday">
+			<div class="medium-12 large-12 columns">
 				<h3>Saturday</h3>
-				<!-- LOOP THROUGH SHOWS IN A GIVEN DAY -->
 				<?php
 				$current_day = 'saturday';
 				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages);
 				?>
-                <!-- END LOOP -->
 			</div>
 		</div>
 	</div>
 </div>
-
+<?php
+	$index = 0;//reset counter so we can print out the schedule again for mobile devices
+?>
+<div class="small-12 columns show-for-small-only">
+	<ul class="accordion" data-accordion>
+		<li class="accordion-navigation active">
+			<a href="#sunday">Sunday</a>
+			<div id="sunday" class="content active">
+				<?php
+				$current_day = 'sunday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+		<li class="accordion-navigation">
+			<a href="#monday">Monday</a>
+			<div id="monday" class="content">
+				<?php
+				$current_day = 'monday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+				<li class="accordion-navigation">
+			<a href="#tuesday">Tuesday</a>
+			<div id="tuesday" class="content">
+				<?php
+				$current_day = 'tuesday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+				<li class="accordion-navigation">
+			<a href="#wednesday">Wednesday</a>
+			<div id="wednesday" class="content">
+				<?php
+				$current_day = 'wednesday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+				<li class="accordion-navigation">
+			<a href="#thursday">Thursday</a>
+			<div id="thursday" class="content">
+				<?php
+				$current_day = 'thursday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+				<li class="accordion-navigation">
+			<a href="#friday">Friday</a>
+			<div id="friday" class="content">
+				<?php
+				$current_day = 'friday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+				<li class="accordion-navigation">
+			<a href="#saturday">Saturday</a>
+			<div id="saturday" class="content">
+				<?php
+				$current_day = 'saturday';
+				$index = sting_display_show_schedule($current_day, $index, $child_pages, $num_pages, true);
+				?>
+			</div>
+		</li>
+	</ul>
+</div>
 </div>
 <!--end schedule.php stuff -->
 <?php get_footer() ?>
