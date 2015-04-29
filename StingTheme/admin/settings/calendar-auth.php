@@ -18,7 +18,6 @@ function create_calendar_auth_page() {
 }
 
 function setup_gcal_auth_2_scripts($hook) {
-	error_log($hook);
 	if ($hook === 'sting_page_calendar_auth') {//need to do this properly (without the reregistration of javascript and putting it in the footer.)
 		wp_deregister_script('jquery');
 		wp_enqueue_script('jquery', get_template_directory_uri().'/js/lib/jquery.min.js','','',false);

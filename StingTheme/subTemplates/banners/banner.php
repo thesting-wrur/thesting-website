@@ -6,7 +6,7 @@
 	} else if (is_404()) {
 		$title = 'Page not found';
 	} else if (is_category()) {
-		$title = single_cat_title('Posts in the category ', false);
+		$title = single_cat_title('', false).' Posts';
 	} else if (is_tag()) {
 		$title = single_cat_title('Posts in the tag ', false);
 	} else if (is_author()) {

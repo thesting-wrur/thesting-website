@@ -2,7 +2,7 @@
 require_once 'php-lib/foundation-press/menu-walker.php';
 require_once 'php-lib/google-api-php-client/src/Google/autoload.php';
 require_once 'admin/admin.php';
-
+$admin_options = get_option('sting_admin_options');
 //enqueue styles
 function sting_enqueue_foundation_styles() {
 	wp_register_style('sting-foundation-app', get_template_directory_uri().'/css/app.css');
@@ -154,11 +154,11 @@ function sting_create_show_type() {
 	$args = array(
 		'description'         => 'Sting Shows',
 		'labels'              => array('name' => 'Shows', 'singular_name' => 'Show', 'add_new_item' => 'Add New Show', 'edit_item' => 'Edit Show', 'new_item' => 'New Show', 'view_item' => 'View Show Page', 'search_items' => 'Search Shows', 'not_found' => 'No shows found', 'not_found_in_trash' => 'No shows found in the Trash'),
-		'supports'            => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields', 'revisions', 'bage-attributes'),
+		'supports'            => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields', 'revisions', 'page-attributes'),
 		'taxonomies'          => array( 'category', 'post_tag' ),
 		'public'              => true,
 		'menu_position'       => 5,
-		'has_archive'         => true,
+		//'has_archive'         => true,///////DO WE WANT THIS????  NO
 		'capability_type'     => 'page',
 		'menu_icon'			  => 'dashicons-microphone',
 		'rewrite'			  => array('slug' => 'shows'),
@@ -169,7 +169,7 @@ function sting_create_show_type() {
 add_action( 'init', 'sting_create_show_type' );
 
 function sting_get_header_image() {
-	$admin_options = get_option('sting_admin_options');
+	global $admin_options;
 	if (get_field('header-image', $id) != '') {
 		return get_field('header-image', $id);
 	} else {
@@ -223,11 +223,14 @@ add_action( 'wp_ajax_current_show', 'send_now_playing_data' );
 add_action( 'wp_ajax_nopriv_current_show', 'send_now_playing_data' );
 
 function send_now_playing_data() {
-	global $gcal_service;
+	global $gcal_service;//defined in /admin/settings/calendar-push.php
+	global $show_type;//defined above
+	global $gcal_event_id_key;//defined in /admin/settings/calendar-push.php
 	global $sting_artist_field_name;//defined in /admin/dashboard/now-playing.php
 	global $sting_title_field_name;//defined in /admin/dashboard/now-playing.php
 	global $sting_widget_id;//defined in /admin/dashboard/now-playing.php
 	global $sting_show_title;//defined in /admin/dashboard/now-playing.php
+	global $sting_show_page_url;//defined in /admin/dashboard/now-playing.php
 	////Pull the current show from google calendar
 	$calendar_options = get_option('sting_calendar_options');
 	sting_setup_gcal();
@@ -244,6 +247,23 @@ function send_now_playing_data() {
 		}
 	}
 	$current_show = $show_list[0];
+	
+	if ($current_show != null) {
+	$id = $current_show->getId();
+	
+	$args = array(
+			'post_type' => $show_type,
+			'meta_key' => $gcal_event_id_key,
+			'meta_value' => $id,
+		);
+	$show_posts = get_posts($args);
+	/*foreach($show_posts as $post) {
+		error_log('Title: '.$post->post_title.' Type: '.$post->post_type.' GcalID '.get_post_meta($post_id, $gcal_event_id_key));
+	}*/
+	$url = get_permalink($show_posts[0] -> ID);
+	} else {
+		$url = '';
+	}
 	$title = $current_show == null ? '' : $current_show->getSummary();//stops fatal error due to there being no shows on the air right now.
 	if ($title == '') {
 		$title = 'The Sting';
@@ -254,6 +274,7 @@ function send_now_playing_data() {
 		$sting_artist_field_name	=>	get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name),
 		$sting_title_field_name 	=>	get_dashboard_widget_option($sting_widget_id, $sting_title_field_name),
 		$sting_show_title			=> $title,
+		$sting_show_page_url		=> $url,
 	);
 	
 	//error_log(var_export($toSend, true));
@@ -264,7 +285,23 @@ function send_now_playing_data() {
 }
 
 function sting_get_admin_message () {
-	return '';
+	global $admin_options;
+	$starttime = strtotime($admin_options['sting_admin_message_start_input_box']);
+	$endtime = strtotime($admin_options['sting_admin_message_end_input_box']);
+	$now = new DateTime('now', new DateTimeZone('America/New_York'));
+	$nowtime = strtotime($now->format('m/d/Y H:i'));
+	//error_log('starttime: '.date('m/d/y h:i',$starttime));
+	//error_log('nowtime: '.date('m/d/y h:i', $nowtime));
+	//error_log('endtime: '.date('m/d/y h:i',$endtime));
+	//error_log('start time < now? '.(($starttime < $nowtime)? 'true' : 'false'));
+	//error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
+	//if ($starttime < $nowtime) { //It should go up immediately once it is posted, not wait. However we still want the start time so we can display it
+		if ($endtime > $nowtime) {
+			$toReturn = $admin_options['sting_admin_message_input_box'].' from '.date('m/d/y h:i A',$starttime).' to '.date('m/d/y h:i A',$endtime);
+		}
+	//}
+	//error_log($toReturn);
+	return $toReturn;
 }
 
 /*function sting_capitalize_title($title, $sep) {

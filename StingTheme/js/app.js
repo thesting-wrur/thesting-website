@@ -31,16 +31,41 @@ function toggleChat() {
 	}
 	chatVisible = !chatVisible;
 }
+
+var hidingStarted = false;
+var hidingTimeout = null;
 function showNowPlaying() {
 	console.log("Showing Now Playing");
 	$("#nowPlaying").fadeIn("slow");
+	clearTimeout(hidingTimeout);
+	console.log("cleared timeout");
+	hidingTimeout = null;
 }
+var startingToFade = false;
 function hideNowPlaying() {
 	console.log("Hiding Now Playing");
-	$("#nowPlaying").fadeOut("slow");
+	startingToFade = true;
+	$("#nowPlaying").fadeOut("slow", function() {
+		startingToFade = false;
+	});
+	hidingStarted = false;
+	hidingTimeout = null;
 }
 $(document).ready(function() {
 	$("#menu-bar").mouseleave(function() {
-		hideNowPlaying();
+		//hideNowPlaying();
+		if (!hidingStarted) {
+			hidingTimeout = setTimeout("hideNowPlaying()", 350);
+			hidingStarted = true;
+		}
 	});
+	$("#menu-bar").mouseenter(function() {
+		clearTimeout(hidingTimeout);
+		console.log("cleared timeout");
+		hidingTimeout = null;
+		hidingStarted = false;
+		if (startingToFade) {
+			$("#nowPlaying").fadeIn("fast");
+		}
+	})
 });

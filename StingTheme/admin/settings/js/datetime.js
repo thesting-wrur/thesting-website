@@ -1,5 +1,4 @@
 jQuery(document).ready(function () {
-	alert('hi');
-	jQuery(".sting-datetime").datepicker();
-	}
+	jQuery(".sting-datetime").datetimepicker({format: 'm/d/Y H:i'});
+}
 );

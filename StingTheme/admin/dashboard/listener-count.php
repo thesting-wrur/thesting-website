@@ -19,7 +19,6 @@ function sting_listen_count_admin_scripts($hook) {
 		wp_register_script('sting-listen-count-script', get_template_directory_uri().'/admin/dashboard/listen-count/livecounter.js');
 		wp_enqueue_script('sting-listen-count-script');
 	}
-	//error_log($hook.' enqueue scripts');
 }
 add_action('admin_enqueue_scripts', 'sting_listen_count_admin_scripts');
 

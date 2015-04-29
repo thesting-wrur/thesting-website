@@ -1,6 +1,7 @@
 <?php
 $gcal_service;
 $cal_options = get_option('sting_calendar_options');
+$gcal_event_id_key = 'gcal_event_id';
 function sting_setup_gcal() {
 	global $gcal_service;
 	global $cal_options;
@@ -31,6 +32,7 @@ function sting_setup_gcal() {
 function sting_push_post_to_gcal($post_id, $post) {
 	global $gcal_service;
 	global $cal_options;
+	global $gcal_event_id_key;
 	$event = new Google_Service_Calendar_Event();
 	
 	$title = ($post -> post_title).' '.coauthors(',', ' and ', ' - ', '', false);
@@ -86,7 +88,7 @@ function sting_push_post_to_gcal($post_id, $post) {
 	//var_dump($cal_options);
 	$createdEvent = $gcal_service->events->insert($calendarID, $event);
 	
-	update_post_meta($post_id, 'gcal_event_id', $createdEvent->getId());
+	update_post_meta($post_id, $gcal_event_id_key, $createdEvent->getId());
 	error_log($createdEvent->getId());
 }
 function sting_format_datetime($timestamp, $date_interval) {

@@ -34,7 +34,7 @@
 
 			<section class="top-bar-section">
 				<ul class="right">
-					<?php echo sting_get_admin_message();?>
+					<li id="sting-admin-message"><?php echo sting_get_admin_message();?></li>
 					<li><a id="desktop-play-pause-outer" onclick="toggleStream();" onmouseover="showNowPlaying();">Listen Now
 						<span id="desktop-play-pause-inner" class="dashicons dashicons-controls-play" style="display:none;"></span>
 					</a></li>
@@ -72,7 +72,7 @@
 					<li id="chat-button"><a onclick="toggleChat();">Chat with the DJ</a></li>
 				</ul>
 				<ul class="left">
-					<li>Current Show: <span class="current-show">The Sting</li>
+					<li class="current-show-label">Current Show:</li><li id="current-show-title" class="current-show">The Sting</li>
 					<li class="now-playing-container" style="display: none;">Now Playing:<span class="now-playing-content"></span></li>
 				</ul>
 			</section>

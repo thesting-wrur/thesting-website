@@ -293,6 +293,7 @@ li.name h1 span.home-name {
 
 a.article-link {
   color: inherit;
+  cursor: default;
 }
 
 a.article-link:hover {
@@ -415,12 +416,21 @@ a.article-link:hover {
 	padding-left: 20px;
 	padding-right: 20px;
 }
-
+/*
 .now-playing ul li span {
 	padding-left: 20px;
 	padding-right: 20px;
+}*/
+#current-show-title{
+	padding-left: 0px;
+	padding-right: 0px;
 }
-
+.current-show-label {
+	padding-right: 5px !important;
+}
+.now-playing-container span{
+	padding-left: 20px;
+}
 /* Dropdown Chat */
 #quick-chat-dropdown {
 	top: 120px;
@@ -465,4 +475,11 @@ article.post {
 }
 .next-previous .right {
 	text-align: right;
+}
+/* Admin Message */
+#sting-admin-message {
+	color: #FFFFFF;
+	background-color: $jet;
+	line-height: 3.75rem;
+	padding-right: 20px;
 }

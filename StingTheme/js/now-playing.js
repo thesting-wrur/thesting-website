@@ -11,11 +11,15 @@ function getCurrentShow() {
 		var currentShowTags = $(".current-show");
 		var len = currentShowTags.length;
 		for (var i = 0; i < len; i++) {
-			currentShowTags[i].innerHTML = parsed.showTitle;
+			if (parsed.showTitle != "The Sting") {
+				currentShowTags[i].innerHTML = "<a href="+parsed.showURL+">" + parsed.showTitle +" </a>";
+			} else {
+				currentShowTags[i].innerHTML = parsed.showTitle;
+			}
 		}
 		
 		var toDisplay = "";
-		//if (response.show-title != "The Sting") { //only display current song data if the show is actually playing. "The Sting" means there is no show. Should be done with wp_localize_script
+		if (parsed.showTitle != "The Sting") { //only display current song data if the show is actually playing. "The Sting" means there is no show. Should be done with wp_localize_script
 			 if (parsed.title != "") {
 				 toDisplay += parsed.title;
 				 
@@ -33,7 +37,11 @@ function getCurrentShow() {
 					currentSongVisible = !currentSongVisible;
 				 }
 			 }
-		//}
+		} else {
+			toDisplay = '';
+			$(".now-playing-container").fadeOut("fast");
+			currentSongVisible == false;
+		}
 		var nowPlayingTags = $(".now-playing-content");
 		for (var i = 0; i < nowPlayingTags.length; i++) {
 			nowPlayingTags[i].innerHTML = toDisplay;

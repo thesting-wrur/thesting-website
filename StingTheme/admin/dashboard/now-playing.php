@@ -5,6 +5,7 @@ $sting_widget_id = 'sting_now_playing_widget';
 $sting_artist_field_name= 'artist';
 $sting_title_field_name = 'title';
 $sting_show_title = 'showTitle';
+$sting_show_page_url = 'showURL';
 $action = 'Update-Now-Playing-Data';
 function sting_add_now_playing_widget() {
 	global $sting_widget_id;

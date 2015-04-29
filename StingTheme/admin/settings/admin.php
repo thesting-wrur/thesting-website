@@ -24,7 +24,7 @@ function sting_setup_admin_options() {
 	add_settings_field('homepage_slider_id', 'Slider to show on the homepage:', 'homepage_slider_id_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_header_image', 'Default Header Image:', 'sting_header_image_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message', 'Admin Message (to Public):', 'sting_admin_message_input_box', $sting_admin_page_name, 'admin_site_settings');
-	add_settings_field('sting_admin_message_start', 'Admin Message Start:', 'sting_admin_message_start_input_box', $sting_admin_page_name, 'admin_site_settings');
+	add_settings_field('sting_admin_message_start', 'Admin Message Event Start:', 'sting_admin_message_start_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message_end', 'Admin Message End:', 'sting_admin_message_end_input_box', $sting_admin_page_name, 'admin_site_settings');
 }
 add_action('admin_init', 'sting_setup_admin_options');
@@ -39,9 +39,9 @@ function sting_setup_media_scripts($page) {
 			wp_enqueue_script('media-upload');
 			wp_enqueue_script('sting_media_upload');
 			wp_enqueue_style('thickbox');
-			wp_enqueue_script('jquery-ui-datepicker');
-		wp_enqueue_style('jquery-ui-datepicker');
-		wp_enqueue_script('sting_datetime', get_template_directory_uri().'/admin/settings/js/datetime.js');
+			wp_enqueue_script('sting-datetimepicker', get_template_directory_uri().'/admin/settings/datetimepicker-master/jquery.datetimepicker.js');
+			wp_enqueue_style('jquery-ui', get_template_directory_uri().'/admin/settings/datetimepicker-master/jquery.datetimepicker.css');
+			wp_enqueue_script('sting_datetime', get_template_directory_uri().'/admin/settings/js/datetime.js');
 		}
 }
 add_action('admin_enqueue_scripts', 'sting_setup_media_scripts');
@@ -149,14 +149,27 @@ function sting_admin_page() {
 function sting_admin_process_input($input) {
 	$complete_success = true;
 	foreach( $input as $key => $value) {
-		$result = $value;
-		if (stripos('num', $key) != 0 || stripos('cat', $key) != 0 || stripos('id', $key) != 0) {
+		$processed = $value;
+		//error_log('Key: '.$key.' Value: '.$value);
+		if (stripos($key, 'um_shows') != false || stripos($key, 'cat') != false || stripos($key, 'id') != false) {//num_shows_input_box ==> search for um_shows because php is interpreting 0 as false (num is the beginning of the key)
+			error_log('Key: '.$key.' Value: '.$value);
 			if (intval($value) <= 0) {
-				$input[$key] = 100;
+				$processed = 100;
 				add_settings_error($key, 'type-error', $key.' must be a positive integer value greater than 0.');
 			}
+		} else if (stripos($key, 'admin_message_start') != false || stripos($key, 'admin_message_end') != false) {
+			if (strtotime($value) == FALSE) {
+				$processed = '';
+				add_settings_error($key, 'type-error', $key.' must be a valid date.');
+			}
+		} else if (stripos($key, 'admin_message_input') != false) {
+			$processed = wp_strip_all_tags($value);
+			if (stripos($value, 'scheduled') == false) {
+				add_settings_error($key, 'type-error', 'Is the maintenance scheduled?');
+			}
 		}
+		$result[$key] = $processed;
 	}
-	return $input;
+	return $result;
 }
 ?>
