@@ -38,7 +38,7 @@ function client_secret_input_box() {
 function setup_gcal_scripts($hook) {
 	//error_log($hook);
 	if ($hook === 'sting_page_calendar_options') {
-		wp_enqueue_script('sting_google_auth', get_template_directory_uri().'/admin/js/google_auth.js');
+		wp_enqueue_script('sting_google_auth', get_template_directory_uri().'/admin/settings/js/google_auth.js');
 	}
 }
 add_action ('admin_enqueue_scripts', 'setup_gcal_scripts', 10, 1);

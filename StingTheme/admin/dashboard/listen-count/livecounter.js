@@ -10,5 +10,5 @@ function loadListenerCount() {
 }
 jQuery(document).ready(function() {
 	loadListenerCount();
-	window.setInterval("loadListenerCount();", 5000);
+	window.setInterval("loadListenerCount();", 10000);
 });

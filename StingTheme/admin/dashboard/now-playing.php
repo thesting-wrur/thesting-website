@@ -6,7 +6,7 @@ $sting_artist_field_name= 'artist';
 $sting_title_field_name = 'title';
 $sting_show_title = 'showTitle';
 $sting_show_page_url = 'showURL';
-$action = 'Update-Now-Playing-Data';
+$action = 'Sting-Update-Now-Playing-Data';
 function sting_add_now_playing_widget() {
 	global $sting_widget_id;
 	wp_add_dashboard_widget(
@@ -28,12 +28,14 @@ add_action('admin_enqueue_scripts', 'sting_setup_now_playing_script');
 add_action( 'wp_ajax_now_playing', 'sting_receive_now_playing_data' );
 function sting_receive_now_playing_data() {
 	global $action;
-	check_ajax_referer($action, '_wpnonce', true);//Checks the wp nonce for validity
+	//check_ajax_referer($action, '_wpnonce', true);//Checks the wp nonce for validity
 	
 	global $sting_widget_id;
 	$post_data = $_POST['data'];
 	//error_log(var_export($post_data, true));
+	//echo var_export($post_data, true);
 	//error_log($post_data[0][1]);
+	//echo $post_data[0][1];
 	$data = Array();
 	foreach ($post_data as $datum) {
 		$data[$datum[0]] = wp_strip_all_tags($datum[1]);
@@ -44,6 +46,7 @@ function sting_receive_now_playing_data() {
 	
 	$data['success'] = 'true';
 	echo json_encode($data);
+	//echo 'hi';
 	wp_die();
 }
 
@@ -76,7 +79,9 @@ function sting_setup_now_playing_widget() {
 		</div>
 	</form>
 	<?php
-	}//end check permissions on whether or not the current user can push the currently playing song to the homepage
+	} else {//end check permissions on whether or not the current user can push the currently playing song to the homepage
+		echo '<br>';//add line if not able to push to homepage
+	}
 	//$nowPlaying = get_dashboard_widget_options('sting_now_playing_widget');
 	echo 'Currently Playing: <span id="title-field"> by </span><span id="artist-field"></span>';
 }

@@ -3,7 +3,7 @@ function getCurrentShow() {
 	var data = {
 		'action': 'current_show',
 	};
-	$.post(adminAjaxUrl, data, function(response) {
+	$.post(ajaxurl, data, function(response) {
 		//alert('Got this from the server: ' + response);
 		//console.log(response);
 		var parsed = JSON.parse(response);

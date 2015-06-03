@@ -343,8 +343,17 @@ a.article-link:hover {
   position: absolute;
   top: 0;
 }
-
-
+.home figure {
+	width: 100% !important;
+	margin: 0px;
+}
+.single figure, .single img {
+	width: 100% !important;
+	box-shadow: 2px 2px 5px $jet;
+}
+.single figure {
+	padding: 5px;
+}
 /* SCHEDULE */
 
 .tabs-content > .content {
@@ -482,4 +491,11 @@ article.post {
 	background-color: $jet;
 	line-height: 3.75rem;
 	padding-right: 20px;
+}
+/* Make posts on show page look good */
+.single-sting_shows .row .row {
+	margin-left: 0px;
+}
+.single-sting_shows .show-banner .columns {
+	padding-left: 0px;
 }

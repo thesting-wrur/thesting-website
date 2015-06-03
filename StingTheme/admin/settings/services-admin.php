@@ -6,9 +6,12 @@ function sting_setup_services_options() {
 	global $sting_services_page_name;
 	register_setting('sting_services_options_group', 'sting_services_options', 'sting_services_process_input');
 	add_settings_section('content_settings', 'Page Content', 'setup_content_section', $sting_services_page_name);
-	add_settings_field('mlp_input', 'Meat Locker Productions Description:', 'mlp_input_box', $sting_services_page_name, 'content_settings');
-	add_settings_field('live_events_input', 'Live Events Description:', 'live_events_input_box', $sting_services_page_name, 'content_settings');
-	add_settings_field('show_dj_input', 'DJing a show Description:', 'show_dj_input_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('s1_title', 'Service 1 Title:', 's1_title_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('s1_input', 'Service 1 Description:', 's1_input_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('s2_title', 'Service 2 Title:', 's2_title_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('s2_input', 'Service 2 Description:', 's2_input_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('s3_title', 'Service 3 Title:', 's3_title_box', $sting_services_page_name, 'content_settings');
+	add_settings_field('s3_input', 'Service 3 Description:', 's3_input_box', $sting_services_page_name, 'content_settings');
 }
 function create_sting_services_options_page() {
 	global $sting_services_page_name;
@@ -18,14 +21,26 @@ function create_sting_services_options_page() {
 
 //input boxes
 $services_options = get_option('sting_services_options');
-function mlp_input_box() {
-	generate_editor('mlp');
+function s1_title_box() {
+	global $services_options;
+	echo "<input name='sting_services_options[s1_title_box]' type='text' value='{$services_options['s1_title_box']}' />";
 }
-function show_dj_input_box() {
-	generate_editor('show_dj');
+function s1_input_box() {
+	generate_editor('s1');
 }
-function live_events_input_box() {
-	generate_editor('live_events');
+function s2_title_box() {
+	global $services_options;
+	echo "<input name='sting_services_options[s2_title_box]' type='text' value='{$services_options['s2_title_box']}' />";
+}
+function s2_input_box() {
+	generate_editor('s2');
+}
+function s3_title_box() {
+	global $services_options;
+	echo "<input name='sting_services_options[s3_title_box]' type='text' value='{$services_options['s3_title_box']}' />";
+}
+function s3_input_box() {
+	generate_editor('s3');
 }
 function generate_editor($slug) {
 	global $services_options;

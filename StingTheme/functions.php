@@ -30,7 +30,7 @@ function sting_enqueue_foundation_script() {
 	wp_enqueue_script('sting-homepage-layout', get_template_directory_uri().'/js/post.js','','',true);
 	wp_enqueue_script('sting-stream', get_template_directory_uri().'/js/stream.js','','',true);
 	wp_enqueue_script('sting-now-playing', get_template_directory_uri().'/js/now-playing.js','','',true);
-	wp_localize_script('sting-now-playing', 'adminAjaxUrl', admin_url( 'admin-ajax.php' ));
+	wp_localize_script('sting-now-playing', 'ajaxurl', admin_url( 'admin-ajax.php' , 'http'));
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
@@ -90,13 +90,37 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 	} else {
 		$stime1 = get_field('start_time', $show1 -> ID, false);
 		$stime2 = get_field('start_time', $show2 -> ID, false);
-		if ($stime1 < $stime2) {
+		$hrs1 = date('H', $stime1);
+		$hrs2 = date('H', $stime2);
+		
+		$min1 = date('i', $stime1);
+		$min2 = date('i', $stime2);
+		
+		if ($hrs1 < $hrs2) {
 			return -1;
-		} else if ($stime1 > $stime2) {
+		} else if ($hrs1 > $hrs2) {
+			return 1;
+		} else {
+			if ($min1 < $min2) {
+				return -1;
+			} else if ($min1 > $min2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		
+		/*
+		$itime1 = intval($stime1);
+		$itime2 = intval($stime2);
+		if ($itime1 < $itime2) {
+			return -1;
+		} else if ($itime1 > $itime2) {
 			return 1;
 		} else {
 			return 0;
 		}
+		*/
 	}
 	return 0;
 }
@@ -142,26 +166,36 @@ function displayShowTime($current_page) {
 }
 function displayShowTitle($current_page, $isMobile) {
 	echo '<div class="large-4 medium-4 columns show-title">';
-	echo $isMobile == true ? '<h2>' : '';
+	echo $isMobile == true ? '<h3>' : '';
 	echo '<a href="'.get_permalink($current_page -> ID).'">'.$current_page -> post_title;
 	echo '</a>';
-	echo $isMobile == true ? '</h2>' : '';
+	echo $isMobile == true ? '</h3>' : '';
 	echo '</div>';
 }
+
+function print_shows($shows) {
+	foreach($shows as $show) {
+		$to_print = 'Show '.$show -> ID .' '. $show-> post_title .' '. $show->post_date.' '.get_field('day', $show -> ID).' '.get_field('start_time', $show -> ID, true).' '.get_field('end_time', $show -> ID, true);
+		error_log($to_print.'\r\n');
+		echo $to_print.'<br />';
+	}
+}
+
 $show_type = 'sting_shows';
 function sting_create_show_type() {
 	global $show_type;
 	$args = array(
 		'description'         => 'Sting Shows',
 		'labels'              => array('name' => 'Shows', 'singular_name' => 'Show', 'add_new_item' => 'Add New Show', 'edit_item' => 'Edit Show', 'new_item' => 'New Show', 'view_item' => 'View Show Page', 'search_items' => 'Search Shows', 'not_found' => 'No shows found', 'not_found_in_trash' => 'No shows found in the Trash'),
-		'supports'            => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields', 'revisions', 'page-attributes'),
+		'supports'            => array('title', 'editor', 'author', 'excerpt', 'custom-fields', 'revisions'), // removed - I (Teddy) don't think we want to have/ are going to have comments on shows
 		'taxonomies'          => array( 'category', 'post_tag' ),
 		'public'              => true,
 		'menu_position'       => 5,
 		//'has_archive'         => true,///////DO WE WANT THIS????  NO
-		'capability_type'     => 'page',
+		'capability_type'     => 'show',//'page',
+		'map_meta_cap'		  => true,
 		'menu_icon'			  => 'dashicons-microphone',
-		'rewrite'			  => array('slug' => 'shows'),
+		'rewrite'			  => array('slug' => 'shows', 'pages' => true),
 	);
 	register_post_type( $show_type, $args );
 //'capabilities'		  => array('edit_post' => 'edit_show', 'read_post' => 'read_show', 'delete_post' => 'delete_show', 'edit_others_posts' => 'edit_others_shows', 'publish_posts' => 'publish_shows', 'read_private_posts' => 'read_private_shows', 'read' => 'read', 'delete_posts' => 'delete_shows', 'delete_private_posts' => 'delete_private_shows', 'delete_published_posts' => 'delete_published_shows', 'edit_private_posts' => 'edit_private_shows', 'edit_published_posts' => 'edit_published_shows', 'delete_others_posts' => 'delete_others_shows'),	
@@ -177,21 +211,68 @@ function sting_get_header_image() {
 	}
 	//echo get_template_directory_uri().'/images/studio.jpg';
 }
-
+$was_on_air = false;
+function check_if_show_is_on_the_air($post_id, $post_obj, $updated) {
+	global $was_on_air;
+	$on_air_field_val = get_field('show_on_air', $post_id);
+	$was_on_air = $on_air_field_val;
+	error_log('test_acf '.var_export($on_air_field_val, true).' priority=0');
+}
+add_action('save_post', 'check_if_show_is_on_the_air', 0, 3);
 function sting_push_show_time_to_gcal($post_id, $post_obj, $updated) {
 	global $show_type;
+	global $was_on_air;
+	$current_on_air_field_val = get_field('show_on_air', $post_id);
+	
+	$create_event = !$was_on_air && get_field('show_on_air', $post_id);
+	$end_event = $was_on_air && !get_field('show_on_air', $post_id);
+	$do_nothing = $was_on_air == get_field('show_on_air', $post_id);
+	$created = $post_obj -> post_date;
+	$modified = $post_obj -> post_modified;
+	error_log('post created '.$created);
+	error_log('post modified '.$modified);
+	$created_idx = strrpos($created, ':');
+	$modified_idx = strrpos($modified, ':');
+	$same_time = substr($created, 0, $created_idx) == substr($modified, 0, $modified_idx);
+	error_log('same time: '.var_export($same_time, true));
+	
+	if ($same_time) {
+		$create_event = true;
+		$do_nothing = false;
+	}
+	error_log('create event '.var_export($create_event, true));
+	error_log('end_event '.var_export($end_event, true));
+	error_log('do nothing '.var_export($do_nothing, true));
 	//error_log ($post_obj -> post_type);
 	//error_log ($show_type);
 	$gcal_id = get_post_meta($post_id, 'gcal_event_id', true);
 	//error_log($gcal_id);
 	$post_status = get_post_status($post_id);
-	if (($post_obj -> post_type) === $show_type && ($post_status == 'publish' || $post_status == 'future') && ($gcal_id == '')) {//stops drafts from getting pushed to the calendar
+	if (($post_obj -> post_type) === $show_type && ($post_status == 'publish' || $post_status == 'future')) {//stops drafts from getting pushed to the calendar
+		if ($do_nothing) {
+			return;
+		}
 		sting_setup_gcal();
-		sting_push_post_to_gcal($post_id, $post_obj);
-		//error_log('var1 = '.$var1.' var2 = '.$var2 -> post_title);
+		if ($create_event || $gcal_id == '') {
+			sting_push_show_to_gcal($post_id, $post_obj);
+			//error_log('var1 = '.$var1.' var2 = '.$var2 -> post_title);
+		} else if ($end_event) {
+			sting_cancel_show_event_gcal($post_id, $post_obj);
+		}
 	}
 }
 add_action('save_post', 'sting_push_show_time_to_gcal', 11, 3);
+
+/*function test_acf2($post_id, $post_obj, $updated) {
+	global $was_on_air;
+	error_log('test_acf2 '.var_export(get_field('show_on_air', $post_id), true));
+	$to_log = $was_on_air == true? 'true' : 'false';
+	error_log('test_acf2 priority=11 was false previously? '.$to_log);
+	error_log('create_event? '.var_export(!$was_on_air && !get_field('show_on_air', $post_id), true));
+	error_log('end_event? '.var_export($was_on_air && get_field('show_on_air', $post_id), true));
+	error_log('do_nothing '.var_export($was_on_air != get_field('show_on_air', $post_id), true));
+}
+//add_action('save_post', 'test_acf2', 11, 3);*/
 
 function setup_gcal_client() {
 	$calendar_options = get_option('sting_calendar_options');
@@ -201,14 +282,16 @@ function setup_gcal_client() {
 	$client->setClientId($calendar_options['client_id_input_box']);
 	$client->setClientSecret($calendar_options['client_secret_input_box']);
 	//$client->setRedirectUri(site_url().'/wp-admin/admin.php?page=calendar_auth');
-	$client->setRedirectUri('http://localhost/bl_site/wp-admin/admin.php?page=calendar_auth');
+	$client->setRedirectUri('https://thesting.wdev.wrur.org/wp-admin/admin.php?page=calendar_auth');
 	$client->addScope('https://www.googleapis.com/auth/calendar');
 	$client->setAccessType('offline');
 	$client->setApprovalPrompt('force');
 	
 	$accessToken = $cal_auth_info['access_token_input_box'];
+	//$accessToken = '{"access_token":"ya29.QgHX48Ip4YrIGhADMxZPRGblfHRrMjjOooap7pIN7mhpTXhQWc7r0MxWMk2dhjYPRB9xpSfwf14v6w","token_type":"Bearer","expires_in":3600,"refresh_token":"1\/vxjHnXZmqNXy0AgD25UZYc57tzuqUn6cufn_ZfKOL44","created":1427393945}';
 	
 	$refreshToken = $cal_auth_info['refresh_token_input_box'];
+	//$refreshToken = '1/vxjHnXZmqNXy0AgD25UZYc57tzuqUn6cufn_ZfKOL44';
 	
 	$client->setAccessToken($accessToken);
 	if ($client->isAccessTokenExpired()) {
@@ -268,7 +351,7 @@ function send_now_playing_data() {
 	if ($title == '') {
 		$title = 'The Sting';
 	} else {
-		$title = substr($title, 0,  strripos($title, '-') - 2);
+		$title = substr($title, 0,  strripos($title, '-') - 1);
 	}
 	$toSend = array(
 		$sting_artist_field_name	=>	get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name),
@@ -303,7 +386,40 @@ function sting_get_admin_message () {
 	//error_log($toReturn);
 	return $toReturn;
 }
-
+/*
+ * Code to allow us to have multiple pages of posts on show pages.
+ * Because we use a custom query, wordpress will not allow us to use the built in page functionality
+ * So, we have to write at least part of it ourselves.
+ */
+function sting_modify_query_show_page($vars) {
+	array_push($vars, 'pg');
+	//error_log(var_export($vars, true));
+	return $vars;
+}
+add_filter( 'query_vars', 'sting_modify_query_show_page' , 10, 1 );
+/*
+ * Code for RSS feeds for the shows - these get the posts from both hosts (and deal with 1 DJ 2 Shows)
+ */
+function sting_add_show_rss_feed() {
+	//error_log('adding_rss_feed');
+	add_feed('show_feed', 'sting_generate_show_rss_feed');
+}
+add_action('init', 'sting_add_show_rss_feed');
+function sting_generate_show_rss_feed() {
+	error_log('generate_rss_feed');
+	get_template_part('subTemplates/rss/rss', 'show');
+}
+function sting_add_feeds_to_header() {
+	global $admin_options;
+	if (get_post_type() === 'sting_shows') {
+		echo '<link rel="alternate" type="application/rss+xml" title="'.get_the_title().'" href="'.get_bloginfo('url').'?feed=show_feed&show='.get_the_ID().'" />';
+	}
+	echo '<link rel="alternate" type="application/rss+xml" title="'.get_bloginfo('name').' - All Posts" href="'.get_bloginfo('rss2_url').'" />';
+	$cat_id = intval($admin_options['homepage_cat_input_box']);
+	echo '<link rel="alternate" type="application/rss+xml" title="'.get_bloginfo('name').' - News Feed" href="'.esc_url(home_url()).'?cat='.$cat_id.'&feed=rss2" />';
+}
+add_action('wp_head', 'sting_add_feeds_to_header');
+remove_action( 'wp_head', 'feed_links_extra', 3 );
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));
 	$subtitle = substr($title, strpos($title, $sep), strlen($title));

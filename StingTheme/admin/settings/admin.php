@@ -7,7 +7,7 @@ require_once 'calendar-push.php';
 $sting_admin_page_name = 'sting_admin';
 function register_sting_admin_page() {
 	global $sting_admin_page_name;
-	add_menu_page( 'Sting Admin', 'Sting', 'edit_theme_options', $sting_admin_page_name, 'sting_admin_page', 'dashicons-admin-generic', '90' );
+	add_menu_page( 'Sting Admin', 'Sting', 'edit_theme_options', $sting_admin_page_name, 'sting_admin_page', 'dashicons-admin-generic', '81' );
 	add_submenu_page($sting_admin_page_name, 'Sting Admin', 'Admin', 'edit_theme_options', $sting_admin_page_name);
 }
 add_action( 'admin_menu', 'register_sting_admin_page' );
@@ -22,6 +22,7 @@ function sting_setup_admin_options() {
 	add_settings_field('homepage_cat_input', 'Category of Posts to show on the Homepage:', 'homepage_cat_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('num_shows', 'Number of shows to request at a time (make this large):', 'num_shows_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('homepage_slider_id', 'Slider to show on the homepage:', 'homepage_slider_id_input_box', $sting_admin_page_name, 'admin_site_settings');
+	add_settings_field('homepage_mobile_slider_id', 'Slider to show on the mobile homepage:', 'homepage_mobile_slider_id_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_header_image', 'Default Header Image:', 'sting_header_image_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message', 'Admin Message (to Public):', 'sting_admin_message_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message_start', 'Admin Message Event Start:', 'sting_admin_message_start_input_box', $sting_admin_page_name, 'admin_site_settings');
@@ -86,12 +87,18 @@ function num_shows_input_box() {
 	echo "<input name='sting_admin_options[num_shows_input_box]' type='text' value='{$admin_options['num_shows_input_box']}' />";
 }
 function homepage_slider_id_input_box() {
+	generate_slider_box('homepage_slider_id_input_box');
+}
+function homepage_mobile_slider_id_input_box() {
+	generate_slider_box('homepage_mobile_slider_id_input_box');
+}
+function generate_slider_box($box_name) {
 	global $admin_options;
 	$sliders = get_posts(array('posts_per_page' => 100, 'post_type' => 'easingslider'));
-	echo '<select id="sting_admin_options[homepage_slider_id_input_box]" name="sting_admin_options[homepage_slider_id_input_box]">';
+	echo '<select id="sting_admin_options['.$box_name.']" name="sting_admin_options['.$box_name.']">';
 	$selected;
 	foreach ($sliders as $slider) {
-		if ($slider -> ID == intval($admin_options['homepage_slider_id_input_box'])) {
+		if ($slider -> ID == intval($admin_options[$box_name])) {
 			$selected = true;
 		} else {
 			$selected = false;

@@ -42,7 +42,7 @@ function submitForm() {
 
 jQuery(document).ready(function() {
 	getCurrentShow();
-	window.setInterval("getCurrentShow();", 10000);
+	window.setInterval("getCurrentShow();", 15000);
 });
 
 var currentSongVisible = false;

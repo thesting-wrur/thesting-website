@@ -9369,28 +9369,45 @@ a.article-link:hover {
   top: 0;
 }
 
-/* SCHEDULE */
+/* line 346, ../scss/app.scss */
+.home figure {
+  width: 100% !important;
+  margin: 0px;
+}
+
 /* line 350, ../scss/app.scss */
+.single figure, .single img {
+  width: 100% !important;
+  box-shadow: 2px 2px 5px #222222;
+}
+
+/* line 354, ../scss/app.scss */
+.single figure {
+  padding: 5px;
+}
+
+/* SCHEDULE */
+/* line 359, ../scss/app.scss */
 .tabs-content > .content {
   padding: 0;
 }
 
-/* line 354, ../scss/app.scss */
+/* line 363, ../scss/app.scss */
 .tabs-content .post {
   line-height: 2em;
 }
 
-/* line 357, ../scss/app.scss */
+/* line 366, ../scss/app.scss */
 .tab-title {
   width: 14.285714%;
 }
 
-/* line 361, ../scss/app.scss */
+/* line 370, ../scss/app.scss */
 .tab-title a {
   text-align: center;
 }
 
-/* line 365, ../scss/app.scss */
+/* line 374, ../scss/app.scss */
 #schedule-container {
   border-left-width: 1pt;
   border-right-width: 1pt;
@@ -9403,18 +9420,18 @@ a.article-link:hover {
   padding: 0px;
 }
 
-/* line 378, ../scss/app.scss */
+/* line 387, ../scss/app.scss */
 .accordion {
   font-size: 14pt;
   margin-left: 0px;
 }
 
-/* line 382, ../scss/app.scss */
+/* line 391, ../scss/app.scss */
 .show-title {
   font-weight: bold;
 }
 
-/* line 385, ../scss/app.scss */
+/* line 394, ../scss/app.scss */
 .accordion .show-title {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -9422,17 +9439,17 @@ a.article-link:hover {
 }
 
 /* MediaElement.js formatting */
-/* line 393, ../scss/app.scss */
+/* line 402, ../scss/app.scss */
 .mejs-offscreen {
   display: none;
 }
 
-/* line 396, ../scss/app.scss */
+/* line 405, ../scss/app.scss */
 .mejs-container {
   display: none;
 }
 
-/* line 400, ../scss/app.scss */
+/* line 409, ../scss/app.scss */
 .show-description p {
   font-size: 18px;
   margin-bottom: 0px;
@@ -9443,12 +9460,12 @@ a.article-link:hover {
  * Now Playing bar
  * @media only screen and (max-width: 40em)
  */
-/* line 409, ../scss/app.scss */
+/* line 418, ../scss/app.scss */
 #nowPlaying {
   display: none;
 }
 
-/* line 412, ../scss/app.scss */
+/* line 421, ../scss/app.scss */
 .now-playing ul li {
   color: #FFFFFF;
   background-color: #222222;
@@ -9462,24 +9479,24 @@ a.article-link:hover {
 	padding-left: 20px;
 	padding-right: 20px;
 }*/
-/* line 424, ../scss/app.scss */
+/* line 433, ../scss/app.scss */
 #current-show-title {
   padding-left: 0px;
   padding-right: 0px;
 }
 
-/* line 428, ../scss/app.scss */
+/* line 437, ../scss/app.scss */
 .current-show-label {
   padding-right: 5px !important;
 }
 
-/* line 431, ../scss/app.scss */
+/* line 440, ../scss/app.scss */
 .now-playing-container span {
   padding-left: 20px;
 }
 
 /* Dropdown Chat */
-/* line 435, ../scss/app.scss */
+/* line 444, ../scss/app.scss */
 #quick-chat-dropdown {
   top: 120px;
   right: 0px;
@@ -9497,12 +9514,12 @@ a.article-link:hover {
   box-shadow: -3px 5px 20px #222222;
 }
 
-/* line 451, ../scss/app.scss */
+/* line 460, ../scss/app.scss */
 input.quick-chat-alias {
   height: 2em;
 }
 
-/* line 454, ../scss/app.scss */
+/* line 463, ../scss/app.scss */
 #chat-button {
   padding-right: 0px;
 }
@@ -9510,12 +9527,12 @@ input.quick-chat-alias {
 /*
  * Temporary Content Feed
  */
-/* line 461, ../scss/app.scss */
+/* line 470, ../scss/app.scss */
 .wp-post-image {
   height: 200px;
 }
 
-/* line 464, ../scss/app.scss */
+/* line 473, ../scss/app.scss */
 .post h2 {
   font-size: 2rem;
   font-weight: normal;
@@ -9523,26 +9540,37 @@ input.quick-chat-alias {
   margin-bottom: 0px;
 }
 
-/* line 470, ../scss/app.scss */
+/* line 479, ../scss/app.scss */
 article.post {
   margin-bottom: 20px;
 }
 
-/* line 473, ../scss/app.scss */
+/* line 482, ../scss/app.scss */
 .next-previous .left {
   text-align: left;
 }
 
-/* line 476, ../scss/app.scss */
+/* line 485, ../scss/app.scss */
 .next-previous .right {
   text-align: right;
 }
 
 /* Admin Message */
-/* line 480, ../scss/app.scss */
+/* line 489, ../scss/app.scss */
 #sting-admin-message {
   color: #FFFFFF;
   background-color: #222222;
   line-height: 3.75rem;
   padding-right: 20px;
+}
+
+/* Make posts on show page look good */
+/* line 496, ../scss/app.scss */
+.single-sting_shows .row .row {
+  margin-left: 0px;
+}
+
+/* line 499, ../scss/app.scss */
+.single-sting_shows .show-banner .columns {
+  padding-left: 0px;
 }

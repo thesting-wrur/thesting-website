@@ -29,7 +29,7 @@ function sting_setup_gcal() {
 	//var_dump($accessToken);
 	//echo '<br>';
 }
-function sting_push_post_to_gcal($post_id, $post) {
+function sting_push_show_to_gcal($post_id, $post) {
 	global $gcal_service;
 	global $cal_options;
 	global $gcal_event_id_key;
@@ -41,7 +41,7 @@ function sting_push_post_to_gcal($post_id, $post) {
 	$event->setDescription(wp_strip_all_tags($post -> post_content), false);
 	$ical_time = date('Ymd\THis', strtotime($cal_options['current_show_end_date_input_box'])).'Z';
 	//var_dump($ical_time);
-	error_log($ical_time.' icaltime');
+	//error_log($ical_time.' icaltime');
 	$event->setRecurrence(array('RRULE:FREQ=WEEKLY;UNTIL='.$ical_time));
 	
 	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
@@ -97,7 +97,31 @@ function sting_format_datetime($timestamp, $date_interval) {
 	$date = new DateTime('now', new DateTimeZone('America/New_York'));
 	$date->setTimestamp($timestamp - $date->getOffset());
 	$date->add($date_interval);
-	//needed to change timezone properly	
+	var_dump($date->format('H:i'));
+	if ($date->format('H:i') == '00:00') {
+		$offset = new DateInterval('P1D');
+		$date->add($offset);
+	}
+	//needed to change timezone properly
+	var_dump($date->format('H:i'));
+	var_dump($date->format(DateTime::ISO8601));
 	return $date->format(DateTime::ISO8601);
+}
+function sting_cancel_show_event_gcal($post_id, $post) {
+	global $gcal_service;
+	global $cal_options;
+	global $gcal_event_id_key;
+	$calendarID = $cal_options['calendar_id_input_box'];
+	
+	$event = $gcal_service->events->get($calendarID, get_post_meta($post_id, $gcal_event_id_key));
+	$now = new DateTime('now', new DateTimeZone('America/New_York'));
+	$ical_time = strtotime($now->format('Ymd\THis'));
+	$time = date('Ymd\THis', $ical_time).'Z';
+	//var_dump($ical_time);
+	//error_log($ical_time.' icaltime');
+	$event->setRecurrence(array('RRULE:FREQ=WEEKLY;UNTIL='.$time));
+	error_log('RRULE:FREQ=WEEKLY;UNTIL='.$time);
+	$updatedEvent = $gcal_service->events->update($calendarID, $event->getId(), $event);
+	error_log($updatedEvent->getId().' old: '.$event->getId());
 }
 ?>

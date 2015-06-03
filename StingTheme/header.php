@@ -35,7 +35,7 @@
 			<section class="top-bar-section">
 				<ul class="right">
 					<li id="sting-admin-message"><?php echo sting_get_admin_message();?></li>
-					<li><a id="desktop-play-pause-outer" onclick="toggleStream();" onmouseover="showNowPlaying();">Listen Now
+					<li class="right"><a id="desktop-play-pause-outer" onclick="toggleStream();" onmouseover="showNowPlaying();">Listen Now
 						<span id="desktop-play-pause-inner" class="dashicons dashicons-controls-play" style="display:none;"></span>
 					</a></li>
 				</ul>
