@@ -79,9 +79,10 @@ if (!isset($sting_query)) {
 			array_push($post_list, $post_information);
 		}//end while
 	}//endif
+	echo '</div>';
 	echo '<div id="post-json" style="display:none">';
 	//echo json_encode($post_list);
 	echo '</div>';
 	echo '<div id="post-content" class="row"></div>'
 ?>
-</div>
+<!--</div>-->

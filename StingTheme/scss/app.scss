@@ -354,6 +354,9 @@ a.article-link:hover {
 .single figure {
 	padding: 5px;
 }
+article iframe {
+	width: 100% !important;
+}
 /* SCHEDULE */
 
 .tabs-content > .content {
@@ -484,6 +487,9 @@ article.post {
 }
 .next-previous .right {
 	text-align: right;
+}
+#post-content {
+	width:100%;
 }
 /* Admin Message */
 #sting-admin-message {
