@@ -348,11 +348,17 @@ a.article-link:hover {
 	margin: 0px;
 }
 .single figure, .single img {
-	width: 100% !important;
+	.alignnone {
+		width: 100% !important;
+	}
 	box-shadow: 2px 2px 5px $jet;
+}
+.alignright {
+		float:right;
 }
 .single figure {
 	padding: 5px;
+	width: auto !important;
 }
 article iframe {
 	width: 100% !important;
@@ -491,12 +497,9 @@ article.post {
 #post-content {
 	width:100%;
 }
-/* Admin Message */
-#sting-admin-message {
-	color: #FFFFFF;
-	background-color: $jet;
-	line-height: 3.75rem;
-	padding-right: 20px;
+.post-date {
+	font-size: 0.55em;
+	padding-top: 0.7em;
 }
 /* Make posts on show page look good */
 .single-sting_shows .row .row {
@@ -505,3 +508,49 @@ article.post {
 .single-sting_shows .show-banner .columns {
 	padding-left: 0px;
 }
+/* Admin Message */
+#sting-admin-message {
+	color: #FFFFFF;
+	background-color: $jet;
+	line-height: 3.75rem;
+	padding-right: 20px;
+}
+/* Show Archive Page */
+.show-archive {
+	.archive-block {
+		margin: 9px 12px 12px;
+		padding: 5px;
+		box-shadow: 2px 2px 2px 0px #99D1E3;
+		border-style: solid;
+		border-width: 2px;
+		border-color: #008CBA;
+		text-align: center;
+		.show-archive-header-img {
+			height: 100px;
+		}
+		a {
+			font-size: 16pt;
+		}
+	}
+	.columns {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+	.show-archive-header-img {
+		width: 100%;
+	}
+	#table table tr:nth-of-type(2n-1) {
+		background-color: #F9F9F9;
+	}
+	table thead {
+		background: #F5F5F5 none repeat scroll 0% 0%;
+	}
+	[class*="column"] + [class*="column"]:last-child {
+		float: left;
+	}
+}
+@media only screen and (max-width: 40em) {
+		.show-archive .row {
+			padding-left: 15px;
+		}
+	}

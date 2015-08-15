@@ -420,6 +420,16 @@ function sting_add_feeds_to_header() {
 }
 add_action('wp_head', 'sting_add_feeds_to_header');
 remove_action( 'wp_head', 'feed_links_extra', 3 );
+
+/*
+ * Comparator for sorting shows by title alphabetically
+ */
+function sting_compare_title($show1, $show2) {
+	$title1 = $show1 -> post_title;
+	$title2 = $show2 -> post_title;
+	
+	return strcmp ($title1, $title2);
+}
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));
 	$subtitle = substr($title, strpos($title, $sep), strlen($title));
