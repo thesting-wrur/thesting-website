@@ -26,7 +26,7 @@ $num_pages = count($shows);
 	//echo 'Post-Sort<br />';
 	$index = 0;
 	?>
-	<ul class="tabs" data-tab>
+	<!--<ul class="tabs" data-tab>
 		<li class="tab-title"><a href="#table">Table Layout</a></li>
 		<li class="tab-title active"><a href="#grid">Grid Layout by Title</a></li>
 	</ul>
@@ -45,7 +45,7 @@ $num_pages = count($shows);
 				<th><h4>Air Time</h4></th>
 			</tr>
 		</thead>
-	<?php
+	<php
 	//temporarily hijack the global post object
 	global $post;
 	$temp_post = $post;	
@@ -53,9 +53,9 @@ $num_pages = count($shows);
 		$post = $show;
 		?>
 			<tr>
-				<td rowspan="2"><img class="show-archive-header-img" src="<?php echo sting_get_header_image();?> "></td>
-				<td><?php echo '<a href="'.get_permalink($show).'">'.$show -> post_title.'</a>'; ?></td>
-				<td rowspan="2"><?php
+				<td rowspan="2"><img class="show-archive-header-img" src="<php echo sting_get_header_image();?> "></td>
+				<td><php echo '<a href="'.get_permalink($show).'">'.$show -> post_title.'</a>'; ?></td>
+				<td rowspan="2"><php
 						if (get_field('show_on_air', $show -> ID)) {
 							echo 'Airs on:<br>';
 							echo ucfirst(get_field('day', $show -> ID));
@@ -67,13 +67,13 @@ $num_pages = count($shows);
 					?></td>
 			</tr>
 			<tr>
-				<td><?php echo coauthors(', ', ' and ', '', '', false); ?></td>
+				<td><php echo coauthors(', ', ' and ', '', '', false); ?></td>
 			</tr>
-		<?php
+		<php
 	}
 	$post = $temp_post;
 	echo '</table></div>';
-?>
+?>-->
 <div class="content active row" id="grid">
 	<div class="row">
 		<?php
@@ -120,7 +120,7 @@ $num_pages = count($shows);
 		//return global post object
 		$post = $temp_post;?>
 	</div>
-</div><!--tabs-content-->
+<!--</div><!--tabs-content-->
 </div>
 <!--end showArchive.php stuff -->
 <?php get_footer() ?>
