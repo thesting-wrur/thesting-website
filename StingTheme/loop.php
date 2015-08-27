@@ -43,7 +43,7 @@ if (!isset($sting_query)) {
 					}*/
 				?>
 				<!--Post content and title-->
-				<h2><a href="<?php the_permalink();?>" title="<?php the_title_attribute();?>"> <?php the_title()?></a><?php if ($max_col == 0) {echo '<span class="post-date right">Posted on '.get_the_date().'</span>';}?></h2>
+				<h2><a href="<?php the_permalink();?>" title="<?php the_title_attribute();?>"> <?php the_title()?></a><?php if ($max_col == 0) {echo '<span class="post-date right">'.get_the_date().'</span>';}?></h2>
 				<?php
 					// as we aren't using featured images right now if (!has_post_thumbnail(get_the_ID())) {
 						error_log(get_the_content());

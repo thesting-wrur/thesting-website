@@ -37,6 +37,7 @@ var hidingTimeout = null;
 function showNowPlaying() {
 	console.log("Showing Now Playing");
 	$("#nowPlaying").fadeIn("slow");
+	$("#quick-chat-dropdown").animate({top: "120px"}, 450);//450ms
 	clearTimeout(hidingTimeout);
 	console.log("cleared timeout");
 	hidingTimeout = null;
@@ -45,6 +46,7 @@ var startingToFade = false;
 function hideNowPlaying() {
 	console.log("Hiding Now Playing");
 	startingToFade = true;
+	$("#quick-chat-dropdown").animate({top: "60px"}, 450);//450ms
 	$("#nowPlaying").fadeOut("slow", function() {
 		startingToFade = false;
 	});
@@ -66,6 +68,7 @@ $(document).ready(function() {
 		hidingStarted = false;
 		if (startingToFade) {
 			$("#nowPlaying").fadeIn("fast");
+			$("#quick-chat-dropdown").animate({top: "120px"});
 		}
 	})
 });

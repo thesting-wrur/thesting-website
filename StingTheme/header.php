@@ -36,6 +36,10 @@
 			<section class="top-bar-section">
 				<ul class="right">
 					<li id="sting-admin-message"><?php echo sting_get_admin_message();?></li>
+					<li id="sting-desktop-social-icons" class="sting-social-icons">
+						<a href="https://twitter.com/WRURtheSting"><img class="sting-twitter" src="<?php echo get_template_directory_uri();?>/img/TwitterLogo_white.png"></a>
+						<a href="https://www.facebook.com/wrur.thesting"><img class="sting-fb" src="<?php echo get_template_directory_uri();?>/img/FB-f-Logo__white_50.png"></a>
+					</li>
 					<li class="right"><a id="desktop-play-pause-outer" onclick="toggleStream();" onmouseover="showNowPlaying();">Listen Now
 						<span id="desktop-play-pause-inner" class="dashicons dashicons-controls-play" style="display:none;"></span>
 					</a></li>
@@ -99,6 +103,14 @@
 			?>
 		  </h1>
         </section>
+		<section class="right">
+			<ul class="sting-social-icons-mobile">
+				<li id="sting-mobile-social-icons"  class="sting-social-icons">
+					<a href="https://twitter.com/WRURtheSting"><img class="sting-twitter" src="<?php echo get_template_directory_uri();?>/img/TwitterLogo_white.png"></a>
+					<a href="https://www.facebook.com/wrur.thesting"><img class="sting-fb" src="<?php echo get_template_directory_uri();?>/img/FB-f-Logo__white_50.png"></a>
+				</li>
+			</ul>
+		</section>
       </nav>
 	  <?php sting_display_mobile_menu();?>
     </div>

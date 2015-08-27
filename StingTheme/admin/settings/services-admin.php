@@ -18,7 +18,17 @@ function create_sting_services_options_page() {
 	global $sting_admin_page_name;
 	add_submenu_page($sting_admin_page_name, 'Services', 'Services', 'edit_theme_options', $sting_services_page_name, 'create_services_options_page');
 }
-
+/* Image Sizes */
+add_filter( 'image_size_names_choose', 'my_custom_sizes' );
+function my_custom_sizes( $sizes ) {
+    return array_merge( $sizes, array(
+        'sting-services-img' <= __( 'Services Image' ),
+    ) );
+}
+function sting_setup_img_size() {
+	add_image_size('sting-services-img', 300, 200, false);
+}
+add_action('after_setup_theme', 'sting_setup_img_size');
 //input boxes
 $services_options = get_option('sting_services_options');
 function s1_title_box() {
@@ -57,6 +67,7 @@ function setup_content_section() {
 	$query = new WP_Query('pagename=services');
 	$posts_retrieved = $query -> posts;
 	echo 'View the <a href="'.get_permalink($posts_retrieved[0] -> ID).'">Services Page</a>';
+	echo '<br><br>If you add an image to the description, make sure to select the sting-services-img size for it';
 }
 function create_services_options_page() {
 	global $sting_services_page_name;

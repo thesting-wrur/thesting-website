@@ -1,4 +1,10 @@
-<!--start banner-home.php-->
+<!--start banner-show.php-->
+	<?php
+		$schedule = sting_format_show_schedule().' ';
+		if (stripos($schedule, 'not on the air')) {
+			$schedule = '';
+		}
+	?>
 	<div class="show-banner">
         <a class="article-link">
 		  <img src="<?php echo sting_get_header_image();?> ">
@@ -6,7 +12,7 @@
             <div class="row">
                 <div class="large-12 columns">
 					<h1><?php the_title();?></h1>
-					<p><?php echo coauthors(',', ' and ', 'with ', '', false);?></p>
+					<p><?php echo $schedule.coauthors(',', ' and ', 'with ', '', false);?></p>
                 </div>
             </div>
           </div>
@@ -17,8 +23,8 @@
           <div class="row">
             <div class="large-12 columns">
               <h1><?php the_title();?></h1>
-              <p><?php echo coauthors(', ', ' and ', 'with ', '', false);?></p>
+			  <p><?php echo $schedule.'<br>'.coauthors(',', ' and ', 'with ', '', false);?></p>
             </div>
           </div>
       </div>
-<!--end banner-home.php-->
+<!--end banner-show.php-->

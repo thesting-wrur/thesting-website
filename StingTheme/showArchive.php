@@ -98,18 +98,8 @@ $num_pages = count($shows);
 			<?php echo $show -> post_title.'</a>'; ?>
 			<br>
 			<?php echo 'With '.coauthors(', ', ' and ', '', '', false);?>
-			<br>
-			<?php
-						if (get_field('show_on_air', $show -> ID)) {
-							echo 'Airs ';
-							echo ucfirst(get_field('day', $show -> ID));
-							echo ' at ';
-							echo get_field('start_time', $show -> ID);
-						} else {
-							echo 'This show is not on the air';
-						}
-					?>
-					<br><br>
+			<br> <?php echo sting_format_show_schedule();?>
+			<br><br>
 			</div>
 		</div>
 		<?php
@@ -120,7 +110,7 @@ $num_pages = count($shows);
 		//return global post object
 		$post = $temp_post;?>
 	</div>
-<!--</div><!--tabs-content-->
+<!--</div><--tabs-content-->
 </div>
 <!--end showArchive.php stuff -->
 <?php get_footer() ?>

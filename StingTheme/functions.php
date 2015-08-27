@@ -34,6 +34,53 @@ function sting_enqueue_foundation_script() {
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
+/* Add facebook meta tags and javascript to header */
+function sting_add_fb_head() {
+	global $post;
+	echo '<!-- Begin facebook crawler properties -->';
+	if (is_single()) {
+	?>
+		<meta property="og:url"           content="<?php echo get_permalink();?>" />
+		<meta property="og:title"         content="<?php echo get_the_title(); ?>" />
+		<meta property="og:description"   content="<?php echo apply_filters('get_the_excerpt', $post->post_excerpt); ?>" />
+		<?php
+	} else if (is_home() && is_front_page()) {
+		?>
+		<meta property="og:url"				content="http://wrur.ur.rochester.edu:8000/thestinghi" /><!--hardcoded-->
+		<meta property="og:type"			content="music.radio_station" /> 
+		<meta property="og:title"			content="<?php echo get_bloginfo('name') ?>" />
+		<meta property="og:description"		content="<?php echo get_bloginfo('description') ?>" />
+		<?php
+	} else if (is_page_template('schedule.php')) {
+	?>
+		<meta property="og:title"			content="<?php echo get_bloginfo('name') ?> - Schedule" />
+		<meta property="og:url"           content="<?php echo get_permalink();?>" />
+	<?php
+	}
+	echo '<!-- End facebook crawler properties -->';
+}
+add_action('wp_head', 'sting_add_fb_head');
+function sting_add_fb_foot() {
+	?>
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4";
+	fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+	<?php
+}
+add_action('wp_head', 'sting_add_fb_foot');
+/* End facebook section */
+/* Start twitter section */
+function sting_add_twitter_foot() {
+	?>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<?php
+}
+add_action('wp_footer', 'sting_add_twitter_foot');
 function sting_add_theme_support() {
 	//allow wordpress generated stuff to use html5
 	add_theme_support('html5', array('comment-list', 'comment-form', 'search-form', 'gallery', 'caption'));
@@ -429,6 +476,18 @@ function sting_compare_title($show1, $show2) {
 	$title2 = $show2 -> post_title;
 	
 	return strcmp ($title1, $title2);
+}
+
+function sting_format_show_schedule() {
+		$show_schedule = '';
+	if (get_field('show_on_air', $show -> ID)) {
+		$show_schedule .= ucfirst(get_field('day', $show -> ID)).'s';
+		$show_schedule .= ' at ';
+		$show_schedule .= get_field('start_time', $show -> ID);
+	} else {
+		$show_schedule .= 'This show is not on the air';
+	}
+	return $show_schedule;
 }
 /*function sting_capitalize_title($title, $sep) {
 	$upper_title = substr($title, 0, strpos($title, $sep));

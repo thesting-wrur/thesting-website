@@ -27,7 +27,7 @@ function toggleStream() {
 			saveState(false);
 		}
 	} else {
-		alert('Sorry, the live stream of TheSting is unsupported on your device');
+		alert('Sorry, the live stream of TheSting only works in Chrome on mobile devices.');
 	}
 }
 
