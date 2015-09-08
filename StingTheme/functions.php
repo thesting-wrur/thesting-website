@@ -46,8 +46,7 @@ function sting_add_fb_head() {
 		<?php
 	} else if (is_home() && is_front_page()) {
 		?>
-		<meta property="og:url"				content="http://wrur.ur.rochester.edu:8000/thestinghi" /><!--hardcoded-->
-		<meta property="og:type"			content="music.radio_station" /> 
+		<meta property="og:url"				content="<?php echo get_bloginfo('url');?>" />
 		<meta property="og:title"			content="<?php echo get_bloginfo('name') ?>" />
 		<meta property="og:description"		content="<?php echo get_bloginfo('description') ?>" />
 		<?php
@@ -57,6 +56,7 @@ function sting_add_fb_head() {
 		<meta property="og:url"           content="<?php echo get_permalink();?>" />
 	<?php
 	}
+	echo '<meta property="og:image"			content="'.get_template_directory_uri().'/img/screenshot.jpg" />';
 	echo '<!-- End facebook crawler properties -->';
 }
 add_action('wp_head', 'sting_add_fb_head');
