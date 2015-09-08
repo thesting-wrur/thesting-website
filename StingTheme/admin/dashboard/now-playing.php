@@ -89,14 +89,19 @@ function sting_setup_now_playing_widget() {
 
 function sting_check_homepage_push_permissions() {
 	global $show_type;
+	//var_dump(time());
 	$user_id = get_current_user_id();
 	
 	if (current_user_can('edit_dashboard')) {//allows admins to push the current song to the homepage
 		return true;
 	}
-	$args = array('post_type' => $show_type);
+	$posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];
+	$args = array(	'post_type' => $show_type,
+					'posts_per_page'	=> $posts_to_get,
+					'meta_key'			=> 'show_on_air',
+					'meta_value'		=> true,
+			);
 	$shows = get_posts($args);
-	//error_log(var_export($shows, true));
 	$current_user_shows = array();
 	foreach ($shows as $show) {
 		$coauthors = get_coauthors($show -> ID);
@@ -115,18 +120,27 @@ function sting_check_homepage_push_permissions() {
 		$now = new DateTime('now', new DateTimeZone('America/New_York'));
 		$nowtime = strtotime($now->format('G:i'));
 		error_log($show->post_title);
-		error_log('start time: '.$starttime.' end time: '.$endtime.' now: '.$nowtime);
+		//var_dump('start time: '.$starttime.' end time: '.$endtime.' now: '.$nowtime);
 		error_log('start time < now? '.(($starttime < $nowtime)? 'true' : 'false'));
 		error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
-		if ($starttime < $nowtime ) {
-			error_log('start time < now? '.(($starttime < $nowtime)? 'true' : 'false'));
-			if ($endtime > $nowtime) {
-				error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
-				error_log('returning true');
-				return true;
+		
+		$day = get_field('day', $show->ID);
+		$today = $now->format('l');
+		//var_dump('show day '.$day.' today '.$today);
+		
+		if (strtolower($day) == strtolower($today)) {
+			if ($starttime < $nowtime ) {
+				error_log('start time < now? '.(($starttime < $nowtime)? 'true' : 'false'));
+				if ($endtime > $nowtime) {
+					error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
+					error_log('returning true');
+					var_dump(time());
+					return true;
+				}
 			}
 		}
 	}
+	//var_dump(time());
 	return false;
 }
 /**
