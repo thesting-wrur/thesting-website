@@ -76,7 +76,7 @@ if (!isset($sting_query)) {
 				'datetime'		=>		$datetime,
 				'post_priority'	=>		$priority,
 			);
-			array_push($post_list, $post_information);
+			//array_push($post_list, $post_information); - to be used if we need to send the posts as json.
 		}//end while
 	}//endif
 	echo '</div>';

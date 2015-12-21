@@ -21,11 +21,20 @@ function getCurrentShow() {
 		var toDisplay = "";
 		if (parsed.showTitle != "The Sting") { //only display current song data if the show is actually playing. "The Sting" means there is no show. Should be done with wp_localize_script
 			 if (parsed.title != "") {
-				 toDisplay += parsed.title;
+				title = parsed.title;
+				while (title.indexOf("\\") != -1) {//loops through and removes all instances of backslashes in the title
+					title = title.substr(0, title.indexOf("\\")) + title.substr(title.indexOf("\\") + 1, title.length);
+				}
+				 
+				 toDisplay += title;
 				 
 				 if (parsed.artist != "") {
+					 artist = parsed.artist;
+					while (artist.indexOf("\\") != -1) {//loops through and removes all instances of backslashes in the title
+						artist = artist.substr(0, artist.indexOf("\\")) + artist.substr(artist.indexOf("\\") + 1, artist.length);
+					}
 					 toDisplay += " by ";
-					 toDisplay += parsed.artist;
+					 toDisplay += artist;
 				 }
 				 if (!currentSongVisible) {
 					$(".now-playing-container").fadeIn("fast");

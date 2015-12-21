@@ -2,6 +2,7 @@
 /*
  * Copied from current sting site. To Be Simplified.
  * Screen Scraper
+ * Obsolete as we are now using json that comes from the server automatically.
  */
 function getNumberOfListeners() {
         $ur=$_SERVER['REQUEST_URI'];

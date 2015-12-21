@@ -299,30 +299,37 @@ li.name h1 span.home-name {
     background-color: rgba($jet, 0.666);
     bottom: 0;
     position: absolute;
-    width: 100%;
+    /*width: 100%;*/
   }
-
-  .columns:before {
-    background-color: rgba($jet, 0.666);
-    content: "";
-    height: 1000px;
-    left: -1000px;
-    position: absolute;
-    top: 0;
-    width: 1000px;
+  .columns:before  {
+	background-color: rgba($jet, 0.666);
+	content: "";
+	height: 1000px;
+	left: -1000px;
+	position: absolute;
+	top: 0;
+	width: 1000px;
   }
-
-  .columns:after {
-    background-color: rgba($jet, 0.666);
-    content: "";
-    height: 1000px;
-    left: 100%;
-    position: absolute;
-    top: 0;
-    width: 1000px;
+  .columns:after  {
+	background-color: rgba($jet, 0.666);
+	content: "";
+	height: 1000px;
+	left: 100%;
+	position: absolute;
+	top: 0;
+	width: 1000px;
   }
 }
 
+.sting-social-media-banner {
+	  right: 0px;
+  }
+.sting-social-media-banner:before {
+	background-color: rgba($jet, 0) !important;
+}
+.sting-social-media-banner:after {
+	background-color: rgba($jet, 0) !important;
+}
 .home-banner, .show-banner .columns {
   text-align: left;
 }

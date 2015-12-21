@@ -16,7 +16,7 @@ function sting_setup_services_options() {
 function create_sting_services_options_page() {
 	global $sting_services_page_name;
 	global $sting_admin_page_name;
-	add_submenu_page($sting_admin_page_name, 'Services', 'Services', 'edit_theme_options', $sting_services_page_name, 'create_services_options_page');
+	add_submenu_page($sting_admin_page_name, 'Services', 'Services', 'sting_edit_services_page', $sting_services_page_name, 'create_services_options_page');
 }
 /* Image Sizes */
 add_filter( 'image_size_names_choose', 'my_custom_sizes' );

@@ -40,7 +40,7 @@ function sting_receive_now_playing_data() {
 	foreach ($post_data as $datum) {
 		$data[$datum[0]] = wp_strip_all_tags($datum[1]);
 	}
-	//error_log(var_export($data, true));
+	//error_log($data['title']);
 	
 	update_dashboard_widget_options( $sting_widget_id, $data);///////////WE NEED TO SANITIZE THE DATA BEFORE SENDING IT STRAIGHT TO THE DATABASE!!!!
 	
@@ -134,7 +134,7 @@ function sting_check_homepage_push_permissions() {
 				if ($endtime > $nowtime) {
 					error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
 					error_log('returning true');
-					var_dump(time());
+					//var_dump(time());
 					return true;
 				}
 			}

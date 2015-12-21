@@ -10,7 +10,7 @@ function submitForm() {
 	}
 	console.log(data);
 	
-	var dataForAjax = jQuery.extend({}, data);
+	var dataForAjax = ({}, data);
 	console.log(dataForAjax);
 	
 	var ajaxData = {
@@ -28,10 +28,20 @@ function submitForm() {
 			for (var i = 0; i < formElements.length; i++) {
 				formElements[i].value="";
 			}
-			jQuery("#title-field")[0].innerHTML = reply.title;
+			
+			title = reply.title;
+			while (title.indexOf("\\") != -1) {//loops through and removes all instances of backslashes in the title
+				title = title.substr(0, title.indexOf("\\")) + title.substr(title.indexOf("\\") + 1, title.length);
+			}
+				 
+			jQuery("#title-field")[0].innerHTML = title;
 			if (reply.artist != "") {
+				artist = reply.artist;
+				while (artist.indexOf("\\") != -1) {//loops through and removes all instances of backslashes in the title
+					artist = artist.substr(0, artist.indexOf("\\")) + artist.substr(artist.indexOf("\\") + 1, artist.length);
+				}
 				jQuery("#title-field")[0].innerHTML += " by ";
-				jQuery("#artist-field")[0].innerHTML = reply.artist;
+				jQuery("#artist-field")[0].innerHTML = artist;
 			} else {
 				jQuery("#artist-field")[0].innerHTML = "";
 			}
@@ -63,14 +73,22 @@ function getCurrentShow() {
 		
 		//if (response.show-title != "The Sting") { //only display current song data if the show is actually playing. "The Sting" means there is no show. Should be done with wp_localize_script
 			 if (parsed.title != "") {
-				 jQuery("#title-field")[0].innerHTML = parsed.title;
+				title = parsed.title;
+				while (title.indexOf("\\") != -1) {//loops through and removes all instances of backslashes in the title
+					title = title.substr(0, title.indexOf("\\")) + title.substr(title.indexOf("\\") + 1, title.length);
+				}
+				jQuery("#title-field")[0].innerHTML = title;
 				 
-				 if (parsed.artist != "") {
-					 jQuery("#artist-field")[0].innerHTML = " by " + parsed.artist;
-				 }
+				if (parsed.artist != "") {
+					artist = parsed.artist;
+					while (artist.indexOf("\\") != -1) {//loops through and removes all instances of backslashes in the artist
+						artist = artist.substr(0, artist.indexOf("\\")) + artist.substr(artist.indexOf("\\") + 1, artist.length);
+					}
+					jQuery("#artist-field")[0].innerHTML = " by " + artist;
+				}
 			 } else {
-				 jQuery("#title-field")[0].innerHTML = "Nothing Playing Right Now";
-				 jQuery("#artist-field")[0].innerHTML = "";
+				jQuery("#title-field")[0].innerHTML = "Nothing Playing Right Now";
+				jQuery("#artist-field")[0].innerHTML = "";
 			 }
 		//}
 	});

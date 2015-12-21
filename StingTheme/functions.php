@@ -34,6 +34,11 @@ function sting_enqueue_foundation_script() {
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
+/* Meta tag for Teddy to verify ownership of thesting.wrur.org for Google Webmaster Tools */
+function sting_add_webmaster_tools_meta_head() {
+	echo '<meta name="google-site-verification" content="YcHsMSIoweqqISBMkWniYMfQsM3Kc_hWTB1RnNM7Y8I" />';
+}
+add_action('wp_head', 'sting_add_webmaster_tools_meta_head');
 /* Add facebook meta tags and javascript to header */
 function sting_add_fb_head() {
 	global $post;
@@ -42,7 +47,7 @@ function sting_add_fb_head() {
 	?>
 		<meta property="og:url"           content="<?php echo get_permalink();?>" />
 		<meta property="og:title"         content="<?php echo get_the_title(); ?>" />
-		<meta property="og:description"   content="<?php echo apply_filters('get_the_excerpt', $post->post_excerpt); ?>" />
+		<!--<meta property="og:description"   content="<php echo apply_filters('get_the_excerpt', $post->post_excerpt); ?>" />-->
 		<?php
 	} else if (is_home() && is_front_page()) {
 		?>
@@ -353,6 +358,7 @@ add_action( 'wp_ajax_current_show', 'send_now_playing_data' );
 add_action( 'wp_ajax_nopriv_current_show', 'send_now_playing_data' );
 
 function send_now_playing_data() {
+	//var_dump('send_now_playing_data');
 	global $gcal_service;//defined in /admin/settings/calendar-push.php
 	global $show_type;//defined above
 	global $gcal_event_id_key;//defined in /admin/settings/calendar-push.php
@@ -400,13 +406,27 @@ function send_now_playing_data() {
 	} else {
 		$title = substr($title, 0,  strripos($title, '-') - 1);
 	}
+	$artist = get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name);
+	$songTitle = get_dashboard_widget_option($sting_widget_id, $sting_title_field_name);
+	
+	error_log(strpos($artist, '\\'));
+	error_log(strpos($artist, "\'"));
+	error_log(strpos($artist, "'"));
+	
+	while(stripos($artist, '\\')) {
+		$indexSlash = stripos($artist, '\\');
+		$firstPart = substr($artist, 0, $indexSlash);
+		$lastPart = substr($artist, $indexSlash + 1, strlen($artist));
+		error_log($firstPart);
+		error_log($lastPart);
+		$artist = $firstPart.$lastPart;
+	}
 	$toSend = array(
-		$sting_artist_field_name	=>	get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name),
-		$sting_title_field_name 	=>	get_dashboard_widget_option($sting_widget_id, $sting_title_field_name),
+		$sting_artist_field_name	=>	$artist,
+		$sting_title_field_name 	=>	$songTitle,
 		$sting_show_title			=> $title,
 		$sting_show_page_url		=> $url,
 	);
-	
 	//error_log(var_export($toSend, true));
 	//error_log(get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name));
 	//error_log(get_dashboard_widget_option($sting_widget_id, $sting_title_field_name));
@@ -427,7 +447,7 @@ function sting_get_admin_message () {
 	//error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
 	//if ($starttime < $nowtime) { //It should go up immediately once it is posted, not wait. However we still want the start time so we can display it
 		if ($endtime > $nowtime) {
-			$toReturn = $admin_options['sting_admin_message_input_box'].' from '.date('m/d/y h:i A',$starttime).' to '.date('m/d/y h:i A',$endtime);
+			$toReturn = $admin_options['sting_admin_message_input_box'].' starts at '.date('m/d/y h:i A',$starttime).' and ends at '.date('m/d/y h:i A',$endtime);
 		}
 	//}
 	//error_log($toReturn);
