@@ -2,19 +2,23 @@
 /*
 Template Name: Show Archive Page
 */
+/**
+ * Used for the page that has all of the shows on it (both on air and off air)
+ * Doesn't show draft shows
+ */
 global $show_type;
 ?>
-<!--showArchive.php -->
+<!--archive-sting_shows.php -->
 <div class="row show-archive">
 <?php
-$posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];
+$posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];//how many shows to request at a time
 $args = array(
 	'posts_per_page'	=> $posts_to_get,
 	'post_type'			=> $show_type,
 	'post_status'		=> 'publish',
 );
 //	'post_parent'      => $post -> ID,
-$shows = get_posts( $args ); 
+$shows = get_posts( $args ); //get them
 $num_pages = count($shows);
 //var_dump($shows);
 ?>
@@ -22,7 +26,7 @@ $num_pages = count($shows);
 <?php
 	//echo 'Pre-Sort:<br />';
 	//print_shows($shows);
-	usort($shows, "sting_compare_title");
+	usort($shows, "sting_compare_title");//sort the shows alphabetically, sting_compare_title is defined in functions
 	//echo 'Post-Sort<br />';
 	$index = 0;
 	?>
@@ -75,9 +79,9 @@ $num_pages = count($shows);
 	echo '</table></div>';
 ?>-->
 <div class="content active row" id="grid">
-	<div class="row">
+	<div class="row" data-equalizer>
 		<?php
-		//temporarily hijack the global post object
+		//temporarily take over the global post object. this lets us use template tags with it
 		global $post;
 		$temp_post = $post;
 		$max_col = 12;
@@ -86,12 +90,12 @@ $num_pages = count($shows);
 			$post = $show;
 			//echo $current_col;
 			if ($current_col >= $max_col) {
-				echo '</div><div class="row">';
+				echo '</div><div class="row" data-equalizer>';
 				$current_col = 0;
 			}
 			$current_col += 3;?>
 		<div class="large-3 medium-6 columns">
-			<div class="archive-block">
+			<div class="archive-block" data-equalizer-watch>
 			<?php echo '<a href="'.get_permalink($show).'">'?>
 			<img style="width: 200px; height: 100px;" class="show-archive-header-img" src="<?php echo sting_get_header_image();?> ">
 			<br>
@@ -112,5 +116,5 @@ $num_pages = count($shows);
 	</div>
 <!--</div><--tabs-content-->
 </div>
-<!--end showArchive.php stuff -->
+<!--end archive-sting_shows.php stuff -->
 <?php get_footer() ?>

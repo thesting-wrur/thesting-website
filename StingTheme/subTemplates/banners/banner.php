@@ -1,6 +1,9 @@
 <!--start banner.php-->
-<?php $page = get_post(get_queried_object_id());
-	  $title = $page -> post_title;
+<?php
+	$page = get_post(get_queried_object_id());
+	$title = $page -> post_title;
+	
+	global $show_type;//defined in another file
 	if (is_search()) {
 		$title = 'Search Results';
 	} else if (is_404()) {
@@ -14,13 +17,25 @@
 		$title = 'Posts by '.$curauth -> display_name;
 	} else if (is_date()) {
 		$title = 'Posts from ';
+		
 		$m = get_query_var('monthnum');//function came from wp_title's code
-		$month = $wp_locale->get_month($m);
+		$month = sting_num_to_month($m);
+		$month = empty($month)? '' : $month;
+		
 		$year = get_query_var('year');
+		
 		$day = get_query_var('day');
 		$day = empty($day)? '' : $day;
+		
 		$title = $month.' '.$day.' '.$year;
+	} else if (is_post_type_archive($show_type)) {
+		$title = "Shows";
 	}
+function sting_num_to_month($monthNum) {
+	global $wp_locale;
+	error_log(var_export($wp_locale, true)." Locale");
+	return $wp_locale->get_month($monthNum);
+}
 ?>
 <div class="page-banner">
 	<a class="article-link">

@@ -62,7 +62,7 @@
 					'link_after'      => '',
 					'items_wrap'      => '<ul id="%1$s" class="%2$s">%3$s</ul>',
 					'depth'           => 0,
-					'walker'          => new top_bar_walker
+					'walker'          => new top_bar_walker//class found in php-lib/foundationpress
 					);
 					wp_nav_menu($parameters);
 				?>
@@ -93,13 +93,9 @@
         <section class="left" style="padding-left: 10px;">
           <h1 class="title" id="mobile-title">
 		  <?php
-				//if (!is_front_page() || !is_home()) {
 					echo '<a href="'.get_site_url().'">';
 					echo strtoupper(get_bloginfo('name'));
 					echo '</a>';
-				/*} else {
-					echo strtoupper(get_bloginfo('name'));
-				}*/
 			?>
 		  </h1>
         </section>
@@ -116,10 +112,11 @@
     </div>
 	<div id="content">
 	<?php
+	global $show_type;//defined in another file
 	 if (is_front_page()) {
 		//Main big blog page header
 		get_template_part('subTemplates/banners/banner', 'home');
-	} else if (get_post_type() === 'sting_shows') {
+	} else if (get_post_type() === $show_type && !is_post_type_archive($show_type)) {//the shows page should use the standard banner
 		//show page header
 		get_template_part('subTemplates/banners/banner', 'show');
 	} else {

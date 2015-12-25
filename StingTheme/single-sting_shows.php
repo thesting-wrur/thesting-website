@@ -6,8 +6,15 @@ Template Name: Show Page
 <!--start single-sting_show.php -->
 <div class="row show-description">
 <?php
-	if ($post -> post_content != '') {
+	if ($post -> post_content != '') {//if there is content (otherwise we don't want the share this nor the horizontal line)
 		echo apply_filters('the_content',$post -> post_content);
+		
+		?><div class="sting-social-buttons-post row">
+					<a href="https://twitter.com/share" class="twitter-share-button" data-via="WRURtheSting" data-count="none" data-dnt="true">Tweet</a>
+					|<!-- makes it look better -->
+					<div class="fb-share-button" data-href="<?php the_permalink();?>" data-layout="button"></div>
+		</div><?php
+		
 		//line between description and show's feed
 		echo '<hr />';
 	}
@@ -17,46 +24,39 @@ Template Name: Show Page
 $max_col = 0;//Show so only have 1 column
 //Allows for both authors
 $coauthors = get_coauthors($post -> ID);
-$author_id = '';//'author=';
+/*$author_id = '';//'author=';
 foreach($coauthors as $author) {
 	$author_id .= $author -> ID;
 	$author_id .= ',';
 }
-$author_id = substr($author_id, 0, strlen($author_id) - 1);
-
-/*//First check if the author has multiple shows
-$categories = "";
-$title = get_the_title(get_the_ID());
-//error_log($title);
-foreach($coauthors as $author) {
-	$category_query = new WP_Query(array('author' => $author -> ID, 'post_type' => $show_type));
-	if ($category_query -> have_posts()) {
-		while ($category_query -> have_posts()) {
-			$category_query -> the_post();
-			$cats = get_categories();
-			foreach ($cats as $cat) {
-				if ($cat -> cat_name == $title) {
-					if (stripos($categories, $cat -> cat_ID) === false) {
-						$categories .= $cat -> cat_ID . ',';
-					}
-					//error_log($cat -> cat_name .' ' . $cat -> cat_ID .$author -> user_nicename);
-				}
-			}
-		}
-	}
-}
-wp_reset_postdata();
-//error_log(var_export($categories, true));
-error_log($categories);
-*/
+$author_id = substr($author_id, 0, strlen($author_id) - 1);*/
 $categories = get_the_category()[0] -> term_id;
 $categories .= ', -'.get_option('sting_admin_options')['homepage_cat_input_box'];
 $paged = (get_query_var('pg')) ? get_query_var('pg') : 1;
-error_log($paged);
-//error_log($categories);
-//var_dump($categories);
 $show_id = get_queried_object_id();
-$sting_query = new WP_Query(array('author' => $author_id, 'cat' => $categories, 'paged' => $paged));
+	
+$authors = array();
+foreach($coauthors as $author) {
+	array_push($authors, $author -> user_login);
+}
+$author_info = array(
+			array(
+				'taxonomy' 	=> 	'author',
+				'field'		=>	'name',
+				'terms'		=>	$authors,
+				)
+		);
+global $show_type;
+$query_args = array(
+	'post_type'	=> 'post',
+	//'author' => $author_id,
+	'cat' => $categories,
+	'paged' => $paged,
+	'tax_query' => $author_info,
+	);		
+$sting_query = new WP_Query($query_args);
+//error_log(var_export($query_args, true));
+
 get_template_part('loop');
 
 ?>

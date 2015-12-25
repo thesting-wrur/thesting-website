@@ -6,14 +6,14 @@ global $show_type;
 $posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];
 header('Content-Type: '.feed_content_type('rss-http').'; charset='.get_option('blog_charset'), true);
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>';
-error_log('show_feed');
+//error_log('show_feed');
 /*
  *	get requested show id so that we can query based on it
  */
 $request = $_SERVER['REQUEST_URI'];
-error_log($request);
+//error_log($request);
 $ID = substr($request, stripos($request, '&') + 6);
-error_log($ID);
+//error_log($ID);
 $show = get_post($ID);
 if (id == '' || $show -> post_type != $show_type) {
 	wp_die('Need valid show id in order to generate show rss feed', 'Bad ID');
@@ -38,16 +38,35 @@ if (id == '' || $show -> post_type != $show_type) {
 		 * Query for the posts by the authors of the show in the category of the show
 		 */
 		$coauthors = get_coauthors($ID);
-		$author_id = '';//'author=';
+		/*$author_id = '';//'author=';
 		foreach($coauthors as $author) {
 			$author_id .= $author -> ID;
 			$author_id .= ',';
 		}
-		$author_id = substr($author_id, 0, strlen($author_id) - 1);
+		$author_id = substr($author_id, 0, strlen($author_id) - 1);*/
 		$categories = get_the_category($ID)[0] -> term_id;
-		$posts = new WP_Query(array('author' => $author_id, 'cat' => $categories));
+		/*$posts = new WP_Query(array('author' => $author_id, 'cat' => $categories));*/
+		
+		$authors = array();
+		foreach($coauthors as $author) {
+			array_push($authors, $author -> user_login);
+		}
+		$author_info = array(
+			array(
+				'taxonomy' 	=> 	'author',
+				'field'		=>	'name',
+				'terms'		=>	$authors,
+				)
+		);
+		$query_args = array(
+			//'author' => $author_id,
+			'cat' => $categories,
+			'tax_query' => $author_info,
+		);		
+		$posts = new WP_Query($query_args);
+		
 		$first_post = $posts -> posts[0];
-		error_log(var_export($first_post, true));
+		//error_log(var_export($first_post, true));
 		?>
 		<lastBuildDate><?php echo mysql2date('D, d M Y H:i:s +0000', $first_post -> post_date, false); ?></lastBuildDate>
 		

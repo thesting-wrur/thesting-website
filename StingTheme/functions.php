@@ -1,10 +1,27 @@
 <?php
-require_once 'php-lib/foundation-press/menu-walker.php';
-require_once 'php-lib/google-api-php-client/src/Google/autoload.php';
-require_once 'admin/admin.php';
-$admin_options = get_option('sting_admin_options');
-//enqueue styles
-function sting_enqueue_foundation_styles() {
+/**
+ * Collection of helper functions that apply to the entire theme
+ *
+ */
+require_once 'php-lib/foundation-press/menu-walker.php';//loads code necessary to generate the menu
+require_once 'php-lib/google-api-php-client/src/Google/autoload.php';//loads code necessary for any google related operation
+require_once 'admin/admin.php';//loads the admin secton of the theme
+$admin_options = get_option('sting_admin_options');//gets a copy of the options from the admin options page
+/**
+ * Registers and enqueues styles to be added to the webpage header.
+ *
+ * Styles Registered:
+ *		app.css - main style of the theme
+ *		foundation-icons.css - foundation's icons
+ *		raleway.css - the website's font
+ *
+ * Other styles enqueued:
+ *		mediaelement - for the html5 player (with a backup flash player)
+ *		dashicons - for the play/pause icons
+ *
+ * Action Hook: wp_enqueue_scripts
+ */
+function sting_enqueue_foundation_styles() {//enqueue styles
 	wp_register_style('sting-foundation-app', get_template_directory_uri().'/css/app.css');
 	wp_register_style('sting-foundations-icons', get_template_directory_uri().'/css/foundation-icons.css');
 	wp_register_style('sting-font-raleway', get_template_directory_uri().'/css/raleway.css');
@@ -16,14 +33,32 @@ function sting_enqueue_foundation_styles() {
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_styles');
 
-//enqueue scripts
-function sting_enqueue_foundation_script() {
+/**
+ * Regesters and enqueues scripts to be added to the webpage. 
+ *
+ * Deregisters jQuery so that we can use our own. We actually should just go back to using the no-conflict version of jQuery as opposed to bringig in one that might have problems
+ *
+ * Enqueues:
+ *		jQuery
+ *		jQuery Cookies (to facilitate the creation of cookies)
+ *		Foundation, Foundation-tab (schedule page), Foundation-accordion (schedule page), Foundation-equalizer (shows page)
+ *		Modernizr (make new stuff work in old browsers)
+ *		Mediaelement (sting player)
+ *		
+ *		app.js, post.js, stream.js, now-playing.js - code written by us (see the individual file descriptions)
+ *
+ *	Adds the url for admin-ajax to the page (localize script)
+ *
+ *	Action Hook: wp_enqueue_scripts
+ */
+function sting_enqueue_foundation_script() {//enqueue scripts
 	wp_deregister_script('jquery');
 	wp_enqueue_script('jquery', get_template_directory_uri().'/js/lib/jquery.min.js','','',true);
 	wp_enqueue_script('jquery-cookies', get_template_directory_uri().'/js/lib/jquery.cookie.js','','',true);
 	wp_enqueue_script('sting-foundation-js', get_template_directory_uri().'/js/lib/foundation.js','','',true);
 	wp_enqueue_script('sting-foundation-tab-js', get_template_directory_uri().'/js/lib/foundation.tab.js','','',true);
 	wp_enqueue_script('sting-foundation-accordion-js', get_template_directory_uri().'/js/lib/foundation.accordion.js','','',true);
+	wp_enqueue_script('sting-foundation-equalizer-js', get_template_directory_uri().'/js/lib/foundation.equalizer.js','','',true);
 	wp_enqueue_script('sting-modernizr', get_template_directory_uri().'/js/lib/modernizr.js');
 	wp_enqueue_script('mediaelement');
 	wp_enqueue_script('sting-code', get_template_directory_uri().'/js/app.js','','',true);
@@ -34,12 +69,25 @@ function sting_enqueue_foundation_script() {
 }
 add_action('wp_enqueue_scripts', 'sting_enqueue_foundation_script');
 
-/* Meta tag for Teddy to verify ownership of thesting.wrur.org for Google Webmaster Tools */
+/**
+ * Meta tag for Teddy to verify ownership of thesting.wrur.org for Google Webmaster Tools.
+ *
+ * Action Hook: wp_head
+ */
 function sting_add_webmaster_tools_meta_head() {
 	echo '<meta name="google-site-verification" content="YcHsMSIoweqqISBMkWniYMfQsM3Kc_hWTB1RnNM7Y8I" />';
 }
 add_action('wp_head', 'sting_add_webmaster_tools_meta_head');
-/* Add facebook meta tags and javascript to header */
+/**
+ * 
+ * Add facebook meta tags and javascript to header
+ *
+ * Code based on what's found on facebook developers.
+ *
+ * We should find a good way to do a description of the posts
+ *
+ * Action Hook:  wp_head
+ */
 function sting_add_fb_head() {
 	global $post;
 	echo '<!-- Begin facebook crawler properties -->';
@@ -65,6 +113,12 @@ function sting_add_fb_head() {
 	echo '<!-- End facebook crawler properties -->';
 }
 add_action('wp_head', 'sting_add_fb_head');
+
+/**
+ * Adds code that makes the share on facebook buttons work
+ *
+ * Action Hook: wp_had
+ */
 function sting_add_fb_foot() {
 	?>
 	<div id="fb-root"></div>
@@ -80,12 +134,24 @@ function sting_add_fb_foot() {
 add_action('wp_head', 'sting_add_fb_foot');
 /* End facebook section */
 /* Start twitter section */
+/**
+ * Adds code so that the share on twitter button works
+ *
+ * Action Hook: wp_footer
+ */
 function sting_add_twitter_foot() {
 	?>
 	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 	<?php
 }
 add_action('wp_footer', 'sting_add_twitter_foot');
+
+/**
+ *
+ * Tells wordpress to use HTML5 for comments, searching, galleries and captions, as well as support post-thumbnails (featured images) and wordpress generated title tags
+ *
+ * Action Hook: after_setup_theme
+ */
 function sting_add_theme_support() {
 	//allow wordpress generated stuff to use html5
 	add_theme_support('html5', array('comment-list', 'comment-form', 'search-form', 'gallery', 'caption'));
@@ -95,10 +161,21 @@ function sting_add_theme_support() {
 add_action( 'after_setup_theme', 'sting_add_theme_support' );
 
 //register menu - enable a menu in appearance --> menu
+/**
+ * Tells wordpress that we have a menu and makes it our primary navigation menu
+ *
+ * Action Hook: init
+ */
 function sting_register_menu() {
 	register_nav_menu('primary', 'Primary Navigation');
 }
 add_action('init', 'sting_register_menu');
+
+/**
+ * Generates the menu structure for mobile devices
+ * 
+ * Probably called from header.php
+ */
 function sting_display_mobile_menu() {
 	//Code from the codex: http://codex.wordpress.org/Function_Reference/wp_get_nav_menu_items
 	$menu_name = 'primary';
@@ -119,9 +196,14 @@ function sting_display_mobile_menu() {
     }
 	echo $menu_list;
 }
-
+/**
+ * Makes it such that only the category designated for homepage use appears on the homepage
+ *
+ * Action Hook: pre_get_posts
+ * @param $query the query we are modifying
+ */
 function sting_homepage_category( $query ) {
-    if ( $query->is_home() && $query->is_main_query() ) {
+    if ( $query->is_home() && $query->is_main_query() && !is_date()) {
 		$admin_options = get_option('sting_admin_options');
 		$id = intval($admin_options['homepage_cat_input_box']);
         $query->set( 'cat', $id);//make this the correct id
@@ -129,6 +211,13 @@ function sting_homepage_category( $query ) {
 }
 add_action( 'pre_get_posts', 'sting_homepage_category' );
 
+/**
+ * Custom comparator to sort shows by date and time
+ *
+ * Used by the schedule page
+ * @param $show1 - the first show
+ * @param $show2 - the second show
+ */
 function sting_compare_shows_by_date_time($show1, $show2) {
 	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
 	$day1 = get_field('day', $show1 -> ID);
@@ -176,9 +265,26 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 	}
 	return 0;
 }
+
+/**
+ * Actually outputs the show schedule
+ * Called once per day of programming (so 7 times per load * 2 for non-mobile vs. mobile)
+ * @param $day_of_week (which day it is)
+ * @param $index where we are in the list of shows
+ * @param $child_pages array of shows (used to be children of the schedule page before becoming their own post type)
+ * @param $num_pages size of the array
+ * @param $isMobile whether to display the mobile layout or the desktop one
+ */
 function sting_display_show_schedule($day_of_week, $index, $child_pages, $num_pages, $isMobile = false) {
 	global $post;//Will be modified later on, then reverted to what it was. If we don't do this, we will break wordpress
 	//Post refers to the current post. We temporarily use it to refer to another post, and then revert it.
+	if ($num_pages == 0) {
+		echo '<div class="post row">';
+		echo '<div class="large-4 medium-4 columns">';
+		echo 'No shows on '.ucfirst($day_of_week);
+		echo '</div></div>';
+	}
+	
 	$initial_index = $index;
 		for (;$index < $num_pages; $index++) {
 			$current_page = $child_pages[$index];
@@ -210,12 +316,21 @@ function sting_display_show_schedule($day_of_week, $index, $child_pages, $num_pa
 		}
 	return $index;
 }
-
+/**
+ *
+ * Displays the date and time for the show
+ * @param $current_page the page to get the information from (WP_Post object)
+ */
 function displayShowTime($current_page) {
 	echo '<div class="large-4 medium-4 columns show-time">';
 	echo get_field('start_time', $current_page -> ID).' - '.get_field('end_time', $current_page -> ID);
 	echo '</div>';
 }
+/**
+ * Displays the show title, putting it in an h3 if it is on mobile devices
+ * @param $current_page the page to get the information from (WP_Post object)
+ * @param $isMobile whether or not we are on a mobile device
+ */
 function displayShowTitle($current_page, $isMobile) {
 	echo '<div class="large-4 medium-4 columns show-title">';
 	echo $isMobile == true ? '<h3>' : '';
@@ -224,7 +339,10 @@ function displayShowTitle($current_page, $isMobile) {
 	echo $isMobile == true ? '</h3>' : '';
 	echo '</div>';
 }
-
+/**
+ * Prints the show info (probably used for debugging)
+ * @param $shows the list of shows to print
+ */
 function print_shows($shows) {
 	foreach($shows as $show) {
 		$to_print = 'Show '.$show -> ID .' '. $show-> post_title .' '. $show->post_date.' '.get_field('day', $show -> ID).' '.get_field('start_time', $show -> ID, true).' '.get_field('end_time', $show -> ID, true);
@@ -234,19 +352,34 @@ function print_shows($shows) {
 }
 
 $show_type = 'sting_shows';
+/**
+ * Registers the custom post type for shows
+ *
+ * Action Hook: init
+ */
 function sting_create_show_type() {
+	//global variable to keep track of the type
 	global $show_type;
 	$args = array(
-		'description'         => 'Sting Shows',
+		'description'         => 'Sting Shows',//human readable description
+		//human readable labels
 		'labels'              => array('name' => 'Shows', 'singular_name' => 'Show', 'add_new_item' => 'Add New Show', 'edit_item' => 'Edit Show', 'new_item' => 'New Show', 'view_item' => 'View Show Page', 'search_items' => 'Search Shows', 'not_found' => 'No shows found', 'not_found_in_trash' => 'No shows found in the Trash'),
+		//supports a title, the standard post editor, authors, excerpts, custom fields and revisions
 		'supports'            => array('title', 'editor', 'author', 'excerpt', 'custom-fields', 'revisions'), // removed - I (Teddy) don't think we want to have/ are going to have comments on shows
+		//can be put in categories and given tags
 		'taxonomies'          => array( 'category', 'post_tag' ),
+		//see docs, needs to be true to be findable in the backend
 		'public'              => true,
+		//Position in admin menu
 		'menu_position'       => 5,
-		//'has_archive'         => true,///////DO WE WANT THIS????  NO
-		'capability_type'     => 'show',//'page',
+		//allows it to have an archive page (archive-sting_shows.php)
+		'has_archive'         => true,
+		//'has_archive'         => true,///////DO WE WANT THIS????  NO @Teddy - Change as of before launch we do - this will allow people to see shows that are no longer on the air @ Teddy, implemented Dec. 2015
+		'capability_type'     => 'show',//'page', - lets us define special permissions for shows
 		'map_meta_cap'		  => true,
+		//menu icon
 		'menu_icon'			  => 'dashicons-microphone',
+		//makes sure the urls have /shows/, not /sting_shows
 		'rewrite'			  => array('slug' => 'shows', 'pages' => true),
 	);
 	register_post_type( $show_type, $args );
@@ -254,6 +387,10 @@ function sting_create_show_type() {
 }
 add_action( 'init', 'sting_create_show_type' );
 
+/**
+ * Checks if there is a header image defined for the post, otherwise uses the default
+ *
+ */
 function sting_get_header_image() {
 	global $admin_options;
 	if (get_field('header-image', $id) != '') {
@@ -263,7 +400,19 @@ function sting_get_header_image() {
 	}
 	//echo get_template_directory_uri().'/images/studio.jpg';
 }
+
 $was_on_air = false;
+/**
+ * Logic to determine if a show was on the air before the update
+ *
+ * Used to determine if we need to update google calendar.
+ * Occurs before sting_push_show_time_to_gcal, and sets variable that is used by that method
+ *
+ * Action Hook: save_post
+ * @param $post_id the id of the current post
+ * @param $post_obj the current post object
+ * @param updated unused
+ */
 function check_if_show_is_on_the_air($post_id, $post_obj, $updated) {
 	global $was_on_air;
 	$on_air_field_val = get_field('show_on_air', $post_id);
@@ -271,6 +420,14 @@ function check_if_show_is_on_the_air($post_id, $post_obj, $updated) {
 	error_log('test_acf '.var_export($on_air_field_val, true).' priority=0');
 }
 add_action('save_post', 'check_if_show_is_on_the_air', 0, 3);
+
+/**
+ * Pushes show information to google calendar if necessary
+ * Contians logic to determine whether or not to push the information
+ * @param $post_id the id of the current post
+ * @param $post_obj the current post object
+ * @param updated unused
+ */
 function sting_push_show_time_to_gcal($post_id, $post_obj, $updated) {
 	global $show_type;
 	global $was_on_air;
@@ -325,7 +482,10 @@ add_action('save_post', 'sting_push_show_time_to_gcal', 11, 3);
 	error_log('do_nothing '.var_export($was_on_air != get_field('show_on_air', $post_id), true));
 }
 //add_action('save_post', 'test_acf2', 11, 3);*/
-
+/**
+ * Part of the google calendar initialization process (the rest can be found in /admin/settings/calendar-push.php)
+ * Based on google developer documentation
+ */
 function setup_gcal_client() {
 	$calendar_options = get_option('sting_calendar_options');
 	$cal_auth_info = get_option('sting_calendar_auth');
@@ -356,7 +516,10 @@ function setup_gcal_client() {
 //setup ajax for live-updating the current show
 add_action( 'wp_ajax_current_show', 'send_now_playing_data' );
 add_action( 'wp_ajax_nopriv_current_show', 'send_now_playing_data' );
-
+/**
+ * Sends the current show data to browsers when requested by ajax
+ * USes google calendar to determine which show is on now
+ */
 function send_now_playing_data() {
 	//var_dump('send_now_playing_data');
 	global $gcal_service;//defined in /admin/settings/calendar-push.php
@@ -382,7 +545,7 @@ function send_now_playing_data() {
 			array_push($show_list, $show);
 		}
 	}
-	$current_show = $show_list[0];
+	$current_show = $show_list[0];//we only should have one show at a time anyway
 	
 	if ($current_show != null) {
 	$id = $current_show->getId();
@@ -431,9 +594,13 @@ function send_now_playing_data() {
 	//error_log(get_dashboard_widget_option($sting_widget_id, $sting_artist_field_name));
 	//error_log(get_dashboard_widget_option($sting_widget_id, $sting_title_field_name));
 	echo json_encode($toSend);
-	wp_die();
+	wp_die();//ajax so we call wp_die when it is done
 }
-
+/**
+ *
+ * Determines whether or not to show the admin message (the sting will be down for updates from wxy to abc)
+ *
+ */
 function sting_get_admin_message () {
 	global $admin_options;
 	$starttime = strtotime($admin_options['sting_admin_message_start_input_box']);
@@ -453,10 +620,15 @@ function sting_get_admin_message () {
 	//error_log($toReturn);
 	return $toReturn;
 }
-/*
+/**
+ * Modifies the show query to allow for our own page variable
+ *
  * Code to allow us to have multiple pages of posts on show pages.
  * Because we use a custom query, wordpress will not allow us to use the built in page functionality
  * So, we have to write at least part of it ourselves.
+ *
+ * Filter: query_vars
+ * @param $vars the current query variables. We add pg to them
  */
 function sting_modify_query_show_page($vars) {
 	array_push($vars, 'pg');
@@ -464,7 +636,7 @@ function sting_modify_query_show_page($vars) {
 	return $vars;
 }
 add_filter( 'query_vars', 'sting_modify_query_show_page' , 10, 1 );
-/*
+/**
  * Code for RSS feeds for the shows - these get the posts from both hosts (and deal with 1 DJ 2 Shows)
  */
 function sting_add_show_rss_feed() {
@@ -472,10 +644,20 @@ function sting_add_show_rss_feed() {
 	add_feed('show_feed', 'sting_generate_show_rss_feed');
 }
 add_action('init', 'sting_add_show_rss_feed');
+
+/**
+ * Uses custom template for the rss feed for shows
+ */
 function sting_generate_show_rss_feed() {
-	error_log('generate_rss_feed');
+	//error_log('generate_rss_feed');
 	get_template_part('subTemplates/rss/rss', 'show');
 }
+/**
+ * Adds relevent rss feeds to <head>
+ *
+ * Action Hook: wp_head
+ * Removes feed_links_extra as we need to do it ourselves
+ */
 function sting_add_feeds_to_header() {
 	global $admin_options;
 	if (get_post_type() === 'sting_shows') {
@@ -488,8 +670,11 @@ function sting_add_feeds_to_header() {
 add_action('wp_head', 'sting_add_feeds_to_header');
 remove_action( 'wp_head', 'feed_links_extra', 3 );
 
-/*
+/**
  * Comparator for sorting shows by title alphabetically
+ * Used for the shows page
+ * @param show1 first show
+ * @param show2 second show
  */
 function sting_compare_title($show1, $show2) {
 	$title1 = $show1 -> post_title;
@@ -498,6 +683,9 @@ function sting_compare_title($show1, $show2) {
 	return strcmp ($title1, $title2);
 }
 
+/**
+ * Used on the individual show pages to show when they are playing
+ */
 function sting_format_show_schedule() {
 		$show_schedule = '';
 	if (get_field('show_on_air', $show -> ID)) {

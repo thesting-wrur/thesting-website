@@ -1,7 +1,7 @@
 <?php get_header() ?>
 <!--normalPage.php -->
 <?php
-	if (have_posts()) {
+	if (have_posts()) {//Loop for a page (there is only one query, but this makes stuff like the_content work)
 		while(have_posts()) {
 		the_post();
 		//$page = get_post(get_queried_object_id());

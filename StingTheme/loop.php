@@ -3,7 +3,7 @@
 global $wp_query;
 global $sting_query;
 global $max_col;
-if (!isset($sting_query)) {
+if (!isset($sting_query)) {//if we are using this loop for a special query like the one on the show archive page, it will have been set before including this template
 	$sting_query = $wp_query;
 }
 ?>
@@ -15,7 +15,7 @@ if (!isset($sting_query)) {
 	}
 	$current_col = 0;
 	echo '<div class="row">';
-	if ($sting_query -> have_posts()) {
+	if ($sting_query -> have_posts()) {//alternate form of the loop
 		while($sting_query -> have_posts()) {
 			$sting_query -> the_post();//iterate to the next post (this is kindof a foreach loop except using an iterator)
 			if ($current_col > $max_col) {
@@ -57,31 +57,8 @@ if (!isset($sting_query)) {
 				</article>
 				<?php
 			$current_col++;
-
-			$id = get_the_ID();
-			$title = the_title('','',false);
-			$link = get_permalink();
-			$datetime = get_the_time(get_option('date_format'));
-			$content = get_the_excerpt();
-			$image = get_the_post_thumbnail( get_the_ID(), 'thumbnail' );
-			$author = get_the_author();
-			$priority = get_field('post_priority');
-			$post_information = array(
-				'id'			=>		$id,
-				'title'			=>		$title,
-				'image'			=>		$image,
-				'content'		=>		$content,
-				'author'		=>		$author,
-				'link'			=>		$link,
-				'datetime'		=>		$datetime,
-				'post_priority'	=>		$priority,
-			);
-			//array_push($post_list, $post_information); - to be used if we need to send the posts as json.
 		}//end while
 	}//endif
-	echo '</div>';
-	echo '<div id="post-json" style="display:none">';
-	//echo json_encode($post_list);
 	echo '</div>';
 	echo '<div id="post-content" class="row"></div>'
 ?>

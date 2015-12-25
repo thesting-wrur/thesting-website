@@ -2,6 +2,10 @@
 /*
 Template Name: Services Page
 */
+/**
+ *
+ * Displays the services information that's set in the services-admin page
+ */
 $savedOptions = get_option('sting_services_options');
 ?>
 <?php get_header() ?>
