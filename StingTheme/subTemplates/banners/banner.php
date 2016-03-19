@@ -27,7 +27,11 @@
 		$day = get_query_var('day');
 		$day = empty($day)? '' : $day;
 		
-		$title = $month.' '.$day.' '.$year;
+		if ($day != '') {
+			$title .= $month.' '.$day.', '.$year;
+		} else {
+			$title .= $month.' '.$day.' '.$year;
+		}
 	} else if (is_post_type_archive($show_type)) {
 		$title = "Shows";
 	}

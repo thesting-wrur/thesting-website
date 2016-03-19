@@ -1,4 +1,11 @@
-<?php get_header() ?>
+<?php get_header();
+/**
+ * Old normal page template. All the content has been moved into page.php due to shows now
+ * being their own post type and as a result, page.php no longer has to distinguish between
+ * children of the schedule page and normal pages.
+ *
+ */
+?>
 <!--normalPage.php -->
 <?php
 	if (have_posts()) {//Loop for a page (there is only one query, but this makes stuff like the_content work)

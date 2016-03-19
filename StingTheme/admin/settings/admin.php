@@ -43,6 +43,7 @@ function sting_setup_media_scripts($page) {
 			wp_enqueue_script('sting-datetimepicker', get_template_directory_uri().'/admin/settings/datetimepicker-master/jquery.datetimepicker.js');
 			wp_enqueue_style('jquery-ui', get_template_directory_uri().'/admin/settings/datetimepicker-master/jquery.datetimepicker.css');
 			wp_enqueue_script('sting_datetime', get_template_directory_uri().'/admin/settings/js/datetime.js');
+			wp_enqueue_media();
 		}
 }
 add_action('admin_enqueue_scripts', 'sting_setup_media_scripts');

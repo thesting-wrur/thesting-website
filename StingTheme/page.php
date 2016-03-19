@@ -1,18 +1,24 @@
+<?php get_header() ?>
+<!--page.php -->
 <?php
 /*
  * Default Page Template.
- * Note, all pages who are children of the "Schedule" page will be rendered with the "show" template.
- * All other pages will be rendered with the "normalPage" template.
- * This is so that when we add shows, the person who is adding the show only has to set the parent - they don't have to set both the parent and the template.
- *
- * We don't use the first part of the condition any more as shows are now their own custom post type.
- * We should just move normalPage into this file for simplicity reasons.
+ * Used to include code for checking for children of the schedule page as shows, but with shows as their own post type,
+ * that wasn't necessary so this is now just the code for any normal page (ie page without another template)
  */
-/*$id = get_queried_object_id();
-$page = get_post($id);
-if ($page -> post_parent == 2239 || $page -> post_parent == 2145) {
-	get_template_part('single-show', '');
-} else {*/
-	get_template_part('normalPage','');
-//}
-?>
+	if (have_posts()) {//Loop for a page (there is only one query, but this makes stuff like the_content work)
+		while(have_posts()) {
+		the_post();
+		//$page = get_post(get_queried_object_id());
+		?>
+		<div class="row">
+			<article class="full-12 columns">
+				<h2><?php //the_title();//echo $page -> post_title;?></h2>
+				<?php the_content();//echo $page -> post_content; ?>
+			</article>
+		</div>
+	<?php
+		}
+	}?>
+<!--end page.php stuff -->
+<?php get_footer() ?>

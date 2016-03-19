@@ -9239,7 +9239,7 @@ li.name h1 span.home-name {
 
 /* HOMEPAGE GALLERY FORMATTING */
 /* line 216, ../scss/app.scss */
-.easingslider {
+.home-banner .easingslider {
   margin: auto !important;
   position: absolute !important;
   top: 0px;
@@ -9435,7 +9435,7 @@ a.article-link:hover {
 }
 
 /* line 393, ../scss/app.scss */
-.home figure {
+.home figure, .archive :not(.post-type-archive) figure {
   width: 100% !important;
   margin: 0px;
 }

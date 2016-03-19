@@ -83,7 +83,7 @@
 			</section>
 	</div>
 	<div id="quick-chat-dropdown">
-		<?php echo do_shortcode('[quick-chat height="200" userlist="0" smilies="0" ]');?>
+		<?php echo do_shortcode('[quick-chat height="200" userlist="0" smilies="0"]');?>
 	</div>
 	<nav class="tab-bar show-for-small-only">
         <section class="left">
