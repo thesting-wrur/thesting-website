@@ -122,7 +122,7 @@ li.name h1 span.home-name {
 /* SPACE FILLER AT BOTTOM OF CONTENT */
 
 .space-filler {
-  height: 54px;
+  height: 96px;
   position: relative;
 }
 
@@ -241,10 +241,26 @@ li.name h1 span.home-name {
 .page-banner {
   position: relative;
   height: 20vw;
+  margin-bottom: 8px;
   max-height: 100px;
   overflow: hidden;
   width: 100%;
 }
+
+#schedule-container {
+  margin-top: -8px;
+}
+
+.post-meta {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.single .row {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 @media only screen and (max-width: 40em){
 	.page-banner {
 		height: 40vw;
@@ -393,6 +409,10 @@ a.article-link:hover {
 .home figure, .archive :not(.post-type-archive) figure {
 	width: 100% !important;
 	margin: 0px;
+	figcaption {
+		font-size: $paragraph-font-size;
+		font-style: italic;
+	}
 }
 .single figure, .single img {
 	.alignnone {
@@ -528,6 +548,11 @@ input.quick-chat-alias {
 	padding-right: 0px;
 }
 
+.page-template-services .row img {
+	display: block;
+	margin-bottom: 10px;
+}
+
 /*
  * Temporary Content Feed
  */
@@ -578,13 +603,24 @@ article.post {
 }
 .show-archive {
 	.archive-block {
+		/*
 		margin: 9px 12px 12px;
 		padding: 5px;
-		box-shadow: 2px 2px 2px 0px #CCCCCC;/*#99D1E3;*/
+		box-shadow: 2px 2px 2px 0px #CCCCCC;/*#99D1E3;*
+		border-style: solid;
+		border-width: 1px;
+		border-color: #CCCCCC;/*#008CBA;*
+		border-radius: 1px;
+		text-align: center;
+		*/
+		margin: 9px 12px 12px;
+		padding: 5px;
+		box-shadow: 2px 2px 2px 0px #CCCCCC;
 		border-style: solid;
 		border-width: 2px;
-		border-color: #808080;/*#008CBA;*/
+		border-color: #808080;
 		text-align: center;
+		
 		.show-archive-header-img {
 			height: 100px;
 		}

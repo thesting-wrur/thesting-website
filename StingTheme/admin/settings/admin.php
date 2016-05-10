@@ -172,9 +172,9 @@ function sting_admin_process_input($input) {
 			}
 		} else if (stripos($key, 'admin_message_input') != false) {
 			$processed = wp_strip_all_tags($value);
-			if (stripos($value, 'scheduled') == false) {
+			/*if (stripos($value, 'scheduled') == false) {
 				add_settings_error($key, 'type-error', 'Is the maintenance scheduled?');
-			}
+			}*/
 		}
 		$result[$key] = $processed;
 	}

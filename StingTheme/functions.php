@@ -614,7 +614,7 @@ function sting_get_admin_message () {
 	//error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
 	//if ($starttime < $nowtime) { //It should go up immediately once it is posted, not wait. However we still want the start time so we can display it
 		if ($endtime > $nowtime) {
-			$toReturn = $admin_options['sting_admin_message_input_box'].' starts at '.date('m/d/y h:i A',$starttime).' and ends at '.date('m/d/y h:i A',$endtime);
+			$toReturn = $admin_options['sting_admin_message_input_box'].' from '.date('m/d/y h:i A',$starttime).' until '.date('m/d/y h:i A',$endtime);
 		}
 	//}
 	//error_log($toReturn);

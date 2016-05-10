@@ -60,10 +60,10 @@ $sting_query = new WP_Query($query_args);
 get_template_part('loop');
 
 ?>
-<div class="row">
+<div class="row next-previous">
 <!-- The posts are being done with a special query so we need to do more work to get them to work. See sting_modify_query_show_page in functions.php-->
-		<div class="large-4 medium-6 small-12 columns"><?php if ($paged != 1) {echo '<a href="'.get_permalink($show_id).'?pg='.($paged - 1).'">Previous Page</a>';}?></div>
-		<div class="large-4 medium-6 small-12 columns"><?php if ($paged < $sting_query -> max_num_pages) {echo '<a href="'.get_permalink($show_id).'?pg='.($paged + 1).'">Next Page</a>';} ?></div>
+		<div class="large-4 medium-6 small-12 columns left"><?php if ($paged != 1) {echo '<a href="'.get_permalink($show_id).'?pg='.($paged - 1).'">Previous Page</a>';}?></div>
+		<div class="large-4 medium-6 small-12 columns right"><?php if ($paged < $sting_query -> max_num_pages) {echo '<a href="'.get_permalink($show_id).'?pg='.($paged + 1).'">Next Page</a>';} ?></div>
 </div>
 <!--end single-sting_show.php -->
 <?php get_footer() ?>

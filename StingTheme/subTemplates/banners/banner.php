@@ -2,7 +2,6 @@
 <?php
 	$page = get_post(get_queried_object_id());
 	$title = $page -> post_title;
-	
 	global $show_type;//defined in another file
 	if (is_search()) {
 		$title = 'Search Results';
@@ -14,7 +13,11 @@
 		$title = single_cat_title('Posts in the tag ', false);
 	} else if (is_author()) {
 		$curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
-		$title = 'Posts by '.$curauth -> display_name;
+		if ($curauth -> display_name != "") {
+			$title = 'Posts by '.$curauth -> display_name;
+		} else {
+			$title = 'Posts by '.$title;
+		}
 	} else if (is_date()) {
 		$title = 'Posts from ';
 		
@@ -37,7 +40,7 @@
 	}
 function sting_num_to_month($monthNum) {
 	global $wp_locale;
-	error_log(var_export($wp_locale, true)." Locale");
+	//error_log(var_export($wp_locale, true)." Locale");
 	return $wp_locale->get_month($monthNum);
 }
 ?>

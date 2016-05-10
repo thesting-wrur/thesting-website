@@ -8,8 +8,7 @@
 			<div class="row">
 				<!--Post content. See banner.php for title-->
 				<?php //edit_post_link( $link, $before, $after, $id ); ?> 
-				<div class="post-meta">Posted on <?php the_time(get_option('date_format'));?> by <?php coauthors_posts_links(', ', ' and ', '', ''); ?>
-				<!--<php the_author_posts_link();?></div>-->
+				<p class="post-meta">Posted on <?php the_time(get_option('date_format'));?> by <?php coauthors_posts_links(', ', ' and ', '', ''); ?></p>
 				<?php the_content(); ?>
 				<hr class="post-after-content">
 				<div><?php the_tags(' | ');?></div>

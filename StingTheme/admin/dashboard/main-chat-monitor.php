@@ -1,5 +1,6 @@
 <?php
 add_action('wp_dashboard_setup', 'sting_add_monitor_chat_widget');
+//error_log('hi');
 function sting_add_monitor_chat_widget() {
 	wp_add_dashboard_widget(
 		'sting_monitor_chat_widget',

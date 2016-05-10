@@ -7,7 +7,7 @@ if (!isset($sting_query)) {//if we are using this loop for a special query like 
 	$sting_query = $wp_query;
 }
 ?>
-<div class="row">
+<!--<div class="row">-->
 <?php
 	$post_list = array();
 	if (!isset($max_col)) {
@@ -44,6 +44,9 @@ if (!isset($sting_query)) {//if we are using this loop for a special query like 
 				?>
 				<!--Post content and title-->
 				<h2><a href="<?php the_permalink();?>" title="<?php the_title_attribute();?>"> <?php the_title()?></a><?php if ($max_col == 0) {echo '<span class="post-date right">'.get_the_date().'</span>';}?></h2>
+				<?php if ($max_col != 0) { ?>
+					<p class="post-meta">Posted on <?php the_time(get_option('date_format'));?> by <?php coauthors_posts_links(', ', ' and ', '', ''); ?></p>
+				<?php }?>
 				<?php
 					// as we aren't using featured images right now if (!has_post_thumbnail(get_the_ID())) {
 						//error_log(get_the_content());
@@ -59,7 +62,7 @@ if (!isset($sting_query)) {//if we are using this loop for a special query like 
 			$current_col++;
 		}//end while
 	}//endif
-	echo '</div>';
-	echo '<div id="post-content" class="row"></div>'
+	//echo '</div>';
+	//echo '<div id="post-content" class="row"></div>'
 ?>
 <!--</div>-->
