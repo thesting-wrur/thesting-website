@@ -246,10 +246,15 @@ li.name h1 span.home-name {
   overflow: hidden;
   width: 100%;
 }
-
-#schedule-container {
+.page-template-schedule .page-banner {
+	margin-bottom: 0px;
+}
+/*#schedule-container {
   margin-top: -8px;
 }
+.break-message {
+	margin-bottom: 8px
+}*/
 
 .post-meta {
   font-size: 16px;

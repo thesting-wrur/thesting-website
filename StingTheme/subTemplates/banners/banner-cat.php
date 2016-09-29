@@ -7,12 +7,11 @@
 	?>
 	<div class="show-banner">
         <a class="article-link">
-		  <img src="<?php echo sting_get_header_image(get_the_ID());?> ">
+		  <img src="<?php global $admin_options; echo $admin_options['sting_music_blog_header_image_input_box'];?> ">
           <div class="hide-for-small-only">
             <div class="row">
                 <div class="large-12 medium-12 small-12 columns">
-					<h1><?php the_title();?></h1>
-					<p><?php echo $schedule.coauthors(',', ' and ', 'with ', '', false);?></p>
+					<h1><?php single_cat_title();?></h1>
                 </div>
             </div>
           </div>
@@ -22,8 +21,7 @@
       <div class="show-banner-small show-for-small-only">
           <div class="row">
             <div class="large-12 columns">
-              <h1><?php the_title();?></h1>
-			  <p><?php echo $schedule.'<br>'.coauthors(',', ' and ', 'with ', '', false);?></p>
+              <h1><?php single_cat_title();?></h1>
             </div>
           </div>
       </div>

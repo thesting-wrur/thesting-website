@@ -32,6 +32,8 @@ foreach($coauthors as $author) {
 $author_id = substr($author_id, 0, strlen($author_id) - 1);*/
 $categories = get_the_category()[0] -> term_id;
 $categories .= ', -'.get_option('sting_admin_options')['homepage_cat_input_box'];
+$categories .= ', -'.get_option('sting_admin_options')['music_blog_cat_input_box'];
+error_log($categories);
 $paged = (get_query_var('pg')) ? get_query_var('pg') : 1;
 $show_id = get_queried_object_id();
 	

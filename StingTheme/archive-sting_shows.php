@@ -1,4 +1,8 @@
-<?php get_header();
+<?php get_header();?>
+<!--archive-sting_shows.php -->
+<div class="row show-archive">
+
+<?php
 /*
 Template Name: Show Archive Page
 */
@@ -7,9 +11,19 @@ Template Name: Show Archive Page
  * Doesn't show draft shows
  */
 global $show_type;
+
+	$break_end_date = $admin_options['break_schedule_end_input_box'];
+	$break_end_datetime = new DateTime($break_end_date, new DateTimeZone('America/New_York'));
+	$now = new DateTime('now', new DateTimeZone('America/New_York'));
+	//$interval = $now->diff($break_end_datetime);
+	error_log('End Date: '.$break_end_datetime->format('m-d-y H:i:s').' Now: '.$now->format('m-d-y H:i:s'));
+	error_log(var_export($now > $break_end_datetime, true));
+	if ($now < $break_end_datetime)://if the break ended before today, don't show the break schedule message
 ?>
-<!--archive-sting_shows.php -->
-<div class="row show-archive">
+<div class="large-12 medium-12 small-12 row" style="width: 100%; margin-left: 12px; margin-right: 12px; padding-left: 0px;">
+	Note: The Sting is currently on a break schedule. The show times listed below may not accurate until the end of the break. The break ends on <?php echo $break_end_datetime->format('F jS, Y');?>.
+</div>
+<?php endif; ?>
 <?php
 $posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];//how many shows to request at a time
 $args = array(
@@ -97,7 +111,7 @@ $num_pages = count($shows);
 		<div class="large-3 medium-6 columns">
 			<div class="archive-block" data-equalizer-watch>
 			<?php echo '<a href="'.get_permalink($show).'">'?>
-			<img style="width: 200px; height: 100px;" class="show-archive-header-img" src="<?php echo sting_get_header_image();?> ">
+			<img style="width: 200px; height: 100px;" class="show-archive-header-img" src="<?php echo sting_get_header_image(get_the_ID());?> ">
 			<br>
 			<?php echo $show -> post_title.'</a>'; ?>
 			<br>

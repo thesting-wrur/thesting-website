@@ -219,6 +219,8 @@ add_action( 'pre_get_posts', 'sting_homepage_category' );
  * @param $show2 - the second show
  */
 function sting_compare_shows_by_date_time($show1, $show2) {
+	//error_log($show1 -> post_title . "          " . $show2 -> post_title);
+	//echo $show1 -> post_title . "          " . $show2 -> post_title.'<br>';
 	$days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
 	$day1 = get_field('day', $show1 -> ID);
 	$day2 = get_field('day', $show2 -> ID);
@@ -231,37 +233,45 @@ function sting_compare_shows_by_date_time($show1, $show2) {
 	} else {
 		$stime1 = get_field('start_time', $show1 -> ID, false);
 		$stime2 = get_field('start_time', $show2 -> ID, false);
-		$hrs1 = date('H', $stime1);
-		$hrs2 = date('H', $stime2);
+		//error_log($stime1."          ".$stime2);
+		//echo $stime1."          ".$stime2;
+		$s_unix_time1 = strtotime($stime1);
+		$s_unix_time2 = strtotime($stime2);
+		$hrs1 = date('H', $s_unix_time1);
+		$hrs2 = date('H', $s_unix_time2);
 		
-		$min1 = date('i', $stime1);
-		$min2 = date('i', $stime2);
-		
+		$min1 = date('i', $s_unix_time1);
+		$min2 = date('i', $s_unix_time2);
+		//error_log($hrs1.":".$min1.'          '.$hrs2.":".$min2);
+		//echo $hrs1.":".$min1.'          '.$hrs2.":".$min2;
 		if ($hrs1 < $hrs2) {
+			//echo $show1 -> post_title.'<'.$show2 -> post_title;
+			//error_log($show1 -> post_title.'<'.$show2 -> post_title);
+			//echo "<br><br>";
 			return -1;
 		} else if ($hrs1 > $hrs2) {
+			//echo $show1 -> post_title.'>'.$show2 -> post_title;
+			//error_log($show1 -> post_title.'>'.$show2 -> post_title);
+			//echo "<br><br>";
 			return 1;
 		} else {
 			if ($min1 < $min2) {
+				//echo $show1 -> post_title.'<'.$show2 -> post_title;
+				//error_log($show1 -> post_title.'<'.$show2 -> post_title);
+				//echo "<br><br>";
 				return -1;
 			} else if ($min1 > $min2) {
+				//echo $show1 -> post_title.'>'.$show2 -> post_title;
+				//error_log($show1 -> post_title.'>'.$show2 -> post_title);
+				//echo "<br><br>";
 				return 1;
 			} else {
+				//echo $show1 -> post_title.'='.$show2 -> post_title;
+				//error_log($show1 -> post_title.'='.$show2 -> post_title);
+				//echo "<br><br>";
 				return 0;
 			}
 		}
-		
-		/*
-		$itime1 = intval($stime1);
-		$itime2 = intval($stime2);
-		if ($itime1 < $itime2) {
-			return -1;
-		} else if ($itime1 > $itime2) {
-			return 1;
-		} else {
-			return 0;
-		}
-		*/
 	}
 	return 0;
 }
@@ -340,7 +350,7 @@ function displayShowTitle($current_page, $isMobile) {
 	echo '</div>';
 }
 /**
- * Prints the show info (probably used for debugging)
+ * Prints the show info (used for debugging)
  * @param $shows the list of shows to print
  */
 function print_shows($shows) {
@@ -391,9 +401,12 @@ add_action( 'init', 'sting_create_show_type' );
  * Checks if there is a header image defined for the post, otherwise uses the default
  *
  */
-function sting_get_header_image() {
+function sting_get_header_image($specified_id = null) {
 	global $admin_options;
-	if (get_field('header-image', $id) != '') {
+	
+	$id = ($specified_id == null) ? $id : $specified_id;
+	
+	if ($id != 0 && get_field('header-image', $id) != '') {
 		return get_field('header-image', $id);
 	} else {
 		return $admin_options['sting_header_image_input_box'];
@@ -438,8 +451,8 @@ function sting_push_show_time_to_gcal($post_id, $post_obj, $updated) {
 	$do_nothing = $was_on_air == get_field('show_on_air', $post_id);
 	$created = $post_obj -> post_date;
 	$modified = $post_obj -> post_modified;
-	error_log('post created '.$created);
-	error_log('post modified '.$modified);
+	//error_log('post created '.$created);
+	//error_log('post modified '.$modified);
 	$created_idx = strrpos($created, ':');
 	$modified_idx = strrpos($modified, ':');
 	$same_time = substr($created, 0, $created_idx) == substr($modified, 0, $modified_idx);
@@ -613,6 +626,7 @@ function sting_get_admin_message () {
 	//error_log('start time < now? '.(($starttime < $nowtime)? 'true' : 'false'));
 	//error_log('end time > now? '.(($endtime > $nowtime)? 'true' : 'false'));
 	//if ($starttime < $nowtime) { //It should go up immediately once it is posted, not wait. However we still want the start time so we can display it
+	$toReturn = "";
 		if ($endtime > $nowtime) {
 			$toReturn = $admin_options['sting_admin_message_input_box'].' from '.date('m/d/y h:i A',$starttime).' until '.date('m/d/y h:i A',$endtime);
 		}

@@ -3,19 +3,21 @@
         <a class="article-link">
           <!--<img alt="Image of a large Studio" src="<php echo get_template_directory_uri();?>/images/studio.jpg">-->
 		  <div class="hide-for-small-only">
-		  <?php
+		  <img alt="WRUR's FM Studio" src="http://thesting.wrur.org/wp-content/uploads/2015/05/IMG_1439-e1430975143505.jpg">
+		  <!--<php
 			$admin_options = get_option('sting_admin_options');
 			if ( function_exists( "easingslider" ) ) {
 				easingslider( intval($admin_options['homepage_slider_id_input_box']));
-			} ?>
+			} ?>-->
 		</div>
 		<div class="show-for-small-only">
-			<?php
+		<img alt="WRUR's FM Studio" src="http://thesting.wrur.org/wp-content/uploads/2015/05/IMG_1439-e1430975143505.jpg">
+			<!--<php
 			$admin_options = get_option('sting_admin_options');
 			if ( function_exists( "easingslider" ) ) {
 				easingslider( intval($admin_options['homepage_mobile_slider_id_input_box']));
 			}
-			?>
+			?>-->
 		</div>
           <div class="hide-for-small-only">
             <div class="row">

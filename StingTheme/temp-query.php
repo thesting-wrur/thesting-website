@@ -4,7 +4,6 @@
  */
 global $show_type;
 ?>
-<div class="row">
 <?php
 $posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];
 $args = array(
@@ -15,8 +14,8 @@ $args = array(
 	'meta_value'		=> true,
 );
 $child_pages = get_posts( $args ); 
-//var_dump($child_pages);
 usort($child_pages, "sting_compare_shows_by_date_time");
+//var_dump($child_pages);
 $days = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
 $now = new DateTime('now', new DateTimeZone('America/New_York'));
 $today = $days[intval($now->format("w"))];
@@ -31,10 +30,10 @@ foreach($child_pages as $page) {
 	echo $title;
 	echo '<br>';
 	$start_time = get_field('start_time', $page -> ID, false);
-	echo date('H-i', $start_time);
+	echo date('H-i', strtotime($start_time));
 	echo '<br>';
 	$end_time = get_field('end_time', $page -> ID, false);
-	echo date('H-i', $end_time);
-	echo '<br>'
+	echo date('H-i', strtotime($end_time));
+	echo '<br>';
 }
 ?>

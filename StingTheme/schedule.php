@@ -7,7 +7,8 @@ global $show_type;
 <!--schedule.php -->
 <div class="row">
 <?php
-$posts_to_get = get_option('sting_admin_options')['num_shows_input_box'];
+$admin_options = get_option('sting_admin_options');
+$posts_to_get = $admin_options['num_shows_input_box'];
 $args = array(
 	'posts_per_page'	=> $posts_to_get,
 	'post_type'			=> $show_type,
@@ -30,9 +31,21 @@ $num_pages = count($child_pages);
 	$now = new DateTime('now', new DateTimeZone('America/New_York'));
 	$today = $days[intval($now->format("w"))];
 	$index = 0;
+	
+	$break_end_date = $admin_options['break_schedule_end_input_box'];
+	$break_end_datetime = new DateTime($break_end_date, new DateTimeZone('America/New_York'));
+	$now = new DateTime('now', new DateTimeZone('America/New_York'));
+	//$interval = $now->diff($break_end_datetime);
+	error_log('End Date: '.$break_end_datetime->format('m-d-y H:i:s').' Now: '.$now->format('m-d-y H:i:s'));
+	error_log(var_export($now > $break_end_datetime, true));
+	if ($now < $break_end_datetime)://if the break ended before today, don't show the break schedule message
 ?>
+<div class="columns large-12 medium-12 small-12">
+	Note: The Sting is currently on a break schedule. The shows listed may not be on the air until the end of the break. The break ends on <?php echo $break_end_datetime->format('F jS, Y');?>.
+</div>
+<?php endif; ?>
 <!--big devices-->
-<div class="large-12 columns hide-for-small-only" id="schedule-container">
+<div class="large-12 medium-12 columns hide-for-small-only" id="schedule-container">
 	<ul class="tabs horizontal" data-tab role="tablist">
 		<?php
 			$current_day = 'sunday';

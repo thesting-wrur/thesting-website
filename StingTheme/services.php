@@ -33,7 +33,7 @@ You start online on TheSting and eventually could have a show on FM.-->
 </div>
 </div>
 <div class="row" style="text-align: center; margin-top: 40px;"><strong>
-To learn more about any of these services, contact the General Manager, Kedar Shashidhar at <a href="mailto:kshashid@u.rochester.edu">kshashid@u.rochester.edu</a>
+To learn more about any of these services, contact the General Manager.
 </strong></div>
 <!--end services.php stuff -->
 <?php get_footer() ?>

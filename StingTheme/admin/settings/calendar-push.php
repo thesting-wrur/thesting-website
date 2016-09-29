@@ -92,6 +92,7 @@ function sting_push_show_to_gcal($post_id, $post) {
 	error_log($createdEvent->getId());
 }
 function sting_format_datetime($timestamp, $date_interval) {
+	$timestamp = strtotime($timestamp);
 	$interval = DateInterval::createFromDateString('monday');
 	//error_log(var_export($interval, true));
 	$date = new DateTime('now', new DateTimeZone('America/New_York'));

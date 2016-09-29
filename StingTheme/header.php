@@ -113,12 +113,15 @@
 	<div id="content">
 	<?php
 	global $show_type;//defined in another file
+	global $admin_options;//something else requested the options
 	 if (is_front_page()) {
 		//Main big blog page header
 		get_template_part('subTemplates/banners/banner', 'home');
 	} else if (get_post_type() === $show_type && !is_post_type_archive($show_type)) {//the shows page should use the standard banner
 		//show page header
 		get_template_part('subTemplates/banners/banner', 'show');
+	} else if (is_category($admin_options['music_blog_cat_input_box'])) {
+		get_template_part('subTemplates/banners/banner', 'cat');
 	} else {
 		get_template_part('subTemplates/banners/banner');
 	}

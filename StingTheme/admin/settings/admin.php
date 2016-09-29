@@ -19,11 +19,14 @@ function sting_setup_admin_options() {
 	global $sting_admin_page_name;
 	register_setting('sting_admin_options_group', 'sting_admin_options', 'sting_admin_process_input');
 	add_settings_section('admin_site_settings', 'Site Settings', 'setup_admin_content_section', $sting_admin_page_name);
+	add_settings_field('break_schedule_end', 'When does the break end?<br> If it is before today, we are not on a break.', 'break_schedule_end_input_box', $sting_admin_page_name, 'admin_site_settings');
+	add_settings_field('music_blog_cat_input', 'Which Category is the Music Blog:', 'music_blog_cat_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('homepage_cat_input', 'Category of Posts to show on the Homepage:', 'homepage_cat_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('num_shows', 'Number of shows to request at a time (make this large):', 'num_shows_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('homepage_slider_id', 'Slider to show on the homepage:', 'homepage_slider_id_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('homepage_mobile_slider_id', 'Slider to show on the mobile homepage:', 'homepage_mobile_slider_id_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_header_image', 'Default Header Image:', 'sting_header_image_input_box', $sting_admin_page_name, 'admin_site_settings');
+	add_settings_field('sting_music_blog_header_image', 'Music Blog Header Image:', 'sting_music_blog_header_image_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message', 'Admin Message (to Public):', 'sting_admin_message_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message_start', 'Admin Message Event Start:', 'sting_admin_message_start_input_box', $sting_admin_page_name, 'admin_site_settings');
 	add_settings_field('sting_admin_message_end', 'Admin Message End:', 'sting_admin_message_end_input_box', $sting_admin_page_name, 'admin_site_settings');
@@ -83,6 +86,17 @@ function homepage_cat_input_box() {
 		);
 	wp_dropdown_categories($args);
 }
+function music_blog_cat_input_box() {
+	global $admin_options;
+	$args = array( 
+			'name' => 'sting_admin_options[music_blog_cat_input_box]', 
+			'option_none_value' => '0',
+			'selected' => $admin_options['music_blog_cat_input_box'],
+			'orderby' => 'ID',
+			'order' => 'ASC'
+		);
+	wp_dropdown_categories($args);
+}
 function num_shows_input_box() {
 	global $admin_options;
 	echo "<input name='sting_admin_options[num_shows_input_box]' type='text' value='{$admin_options['num_shows_input_box']}' />";
@@ -123,6 +137,10 @@ function image_input_box($box, $id) {
 	echo "<input id='upload_".$id."_background_button' type='button' class='button' value='Select or Upload Image' />";
 }
 
+function sting_music_blog_header_image_input_box() {
+	global $admin_options;
+	echo "<input name='sting_admin_options[sting_music_blog_header_image_input_box]' type='text' value='{$admin_options['sting_music_blog_header_image_input_box']}' />";
+}
 function sting_admin_message_input_box() {
 	global $admin_options;
 	echo "<input name='sting_admin_options[sting_admin_message_input_box]' type='text' value='{$admin_options['sting_admin_message_input_box']}' />";
@@ -134,6 +152,10 @@ function sting_admin_message_start_input_box() {
 function sting_admin_message_end_input_box() {
 	global $admin_options;
 	echo "<input name='sting_admin_options[sting_admin_message_end_input_box]' class='sting-datetime' type='text' value='{$admin_options['sting_admin_message_end_input_box']}' />";
+}
+function break_schedule_end_input_box() {
+	global $admin_options;
+	echo "<input name='sting_admin_options[break_schedule_end_input_box]' class='sting-datetime' type='text' value='{$admin_options['break_schedule_end_input_box']}' />";
 }
 
 function setup_admin_content_section() {
@@ -156,11 +178,12 @@ function sting_admin_page() {
 }
 function sting_admin_process_input($input) {
 	$complete_success = true;
+	$result = array();
 	foreach( $input as $key => $value) {
 		$processed = $value;
-		//error_log('Key: '.$key.' Value: '.$value);
+		error_log('Key: '.$key.' Value: '.$value);
 		if (stripos($key, 'um_shows') != false || stripos($key, 'cat') != false || stripos($key, 'id') != false) {//num_shows_input_box ==> search for um_shows because php is interpreting 0 as false (num is the beginning of the key)
-			error_log('Key: '.$key.' Value: '.$value);
+			//error_log('Key: '.$key.' Value: '.$value);
 			if (intval($value) <= 0) {
 				$processed = 100;
 				add_settings_error($key, 'type-error', $key.' must be a positive integer value greater than 0.');
@@ -170,11 +193,6 @@ function sting_admin_process_input($input) {
 				$processed = '';
 				add_settings_error($key, 'type-error', $key.' must be a valid date.');
 			}
-		} else if (stripos($key, 'admin_message_input') != false) {
-			$processed = wp_strip_all_tags($value);
-			/*if (stripos($value, 'scheduled') == false) {
-				add_settings_error($key, 'type-error', 'Is the maintenance scheduled?');
-			}*/
 		}
 		$result[$key] = $processed;
 	}
