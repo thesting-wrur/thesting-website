@@ -1,1 +1,3 @@
-Nothing here yet. If you want to do stuff make a branch for it. 
+THIS IS THE LAST COMMIT ON GITHUB. DEVELOPMENT MOVING TO BITBUCKET.
+
+IF YOU HAVE QUESTIONS, CONTACT TEDDY REISS, treiss@u.rochester.edu
